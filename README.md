@@ -29,8 +29,8 @@ Regla: **1 issue de Linear = 1 change de OpenSpec = 1 owner**.
 
 ## Convenciones
 
-- **Ramas:** usá el nombre de rama que sugiere Linear para el issue (por ejemplo
-  `ruben/rrg-60-scaffold-cli`).
+- **Ramas:** usa el nombre de rama que sugiere Linear para el issue (botón "Copy git branch
+  name"; por ejemplo `rubenjustiniano96/rrg-60-scaffold-cli-...`).
 - **Commits:** Conventional Commits mencionando el id, por ejemplo
   `feat(cli): add interactive mode (RRG-60)`.
 - Los artefactos de OpenSpec se escriben en inglés; la documentación del equipo, en español.
