@@ -18,7 +18,7 @@
   - `nar` with no arguments starts **interactive mode** (placeholder REPL until RRG-63 adds the agent loop).
   - `nar "<prompt>"` runs **single mode** (placeholder that echoes the prompt until RRG-63).
   - `nar --version` and `nar --help`.
-- Add a **configuration system**: a global file `~/.nar/config.toml` merged with a project file `.nar/config.toml` (project values override global ones), validated on load, with defaults when no file exists. Initial keys: LLM provider and model, approval level, and an `mcp_servers` table reserved for RRG-74.
+- Add a **configuration system**: a global file `~/.nar/config.toml` merged with a project file `.nar/config.toml` (project values override global ones), validated on load, with defaults when no file exists. Initial keys: LLM provider and model, approval level, and an `mcp_servers` table reserved for RRG-74. `nar --show-config` prints the effective configuration and where each value came from.
 - Add **AGENTS.md discovery**: locate `AGENTS.md` at the project root and expose its contents as project instructions for the agent loop (consumed by RRG-63).
 - Add a **base error hierarchy** (a root `NarError` and a `ConfigError` for invalid configuration) and make the CLI show these errors as a clear one-line message with a non-zero exit code instead of a traceback.
 
