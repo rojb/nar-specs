@@ -1,0 +1,11 @@
+# Local agent tooling (per-developer)
+.atl/
+.claude/settings.local.json
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.code-workspace
+
+# Code repo cloned inside this folder (separate git repo)
+nar/

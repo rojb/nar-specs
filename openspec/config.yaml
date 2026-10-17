@@ -1,32 +1,66 @@
 schema: spec-driven
 
-# Project context (optional)
-# This is shown to AI when creating artifacts.
-# Add your tech stack, conventions, style guides, domain knowledge, etc.
-# Example:
-#   context: |
-#     Tech stack: TypeScript, React, Node.js
-#     We use conventional commits
-#     Domain: e-commerce platform
+# Project context
+context: |
+  Product: nar, a CLI coding agent written in Python and invoked from the terminal as `nar`.
+  Built by a 2-person team (Ruben and nathaliascode) as the 3rd-term project for TAP (2026). It
+  replicates the YouTube course "How Claude Code Works (By Building It)" by Rivaan Ranawat
+  (https://www.youtube.com/watch?v=3GjE_YAs03s) and adds course requirements on top of the video.
 
-# Per-artifact rules (optional)
-# Add custom rules for specific artifacts.
-# Example:
-#   rules:
-#     proposal:
-#       - Keep proposals under 500 words
-#       - Always include a "Non-goals" section
-#     tasks:
-#       - Break tasks into chunks of max 2 hours
+  Course requirements on top of the video: context management (compaction + pruning), sessions
+  with history, human in the loop (approval system), connecting external MCP servers (Jira,
+  Microsoft Teams, Linear), using OpenSpec, selectable model provider (Anthropic, OpenRouter,
+  local via Ollama), and research on subagents.
 
-# Per-operation guidance (optional)
-# Add advisory guidance for how apply and archive work should be conducted.
-# This is separate from artifact rules above.
-# Example:
-#   operations:
-#     apply:
-#       guidance:
-#         - Keep test summaries concise
-#     archive:
-#       guidance:
-#         - Summarize the archive outcome before finishing
+  Two repos, one owner per change:
+    - nar-specs: this repo. OpenSpec store (store id nar-specs) plus docs/ (ROADMAP.md, research
+      such as docs/SUBAGENTES.md).
+    - nar: the Python code. Cloned as a nested folder nar/ inside this folder; it is a separate
+      git repo and is gitignored here.
+
+  Workflow rule: one Linear issue = one OpenSpec change = one owner. Linear team Rrgonaut (key
+  RRG), project nar: https://linear.app/rgonaut/project/nar-e1a2c1e6a771 . Every change goes
+  through proposal -> specs -> design -> tasks in nar-specs before any code is written in nar.
+
+  Stack: Python, Click (CLI) + Rich (rendering), prompt_toolkit (slash-command autocompletion),
+  ruff (lint/format), official Anthropic SDK, OpenAI-compatible clients for OpenRouter and
+  Ollama, official Python `mcp` SDK. Entry point: `nar = nar.cli:main` (pip install -e .).
+  Config: ~/.nar/config.toml (user) and .nar/config.toml (project). Project instructions are
+  loaded from AGENTS.md.
+
+  Layout of the nar code repo: package nar/ with subpackages cli, agent (agent loop), context
+  (ContextManager, compaction, pruning), providers (LLMProvider and adapters), tools (Tool,
+  ToolRegistry, built-in tools), mcp (MCP client), session (sessions and checkpoints), ui (Rich
+  rendering, slash-command router), config.
+
+  Ownership: docs/ROADMAP.md maps every OpenSpec change to a single owner and its dependencies.
+
+  Verification: there is no fixed test policy in this store. Verification of each change is the
+  manual checklist from its tasks.md plus whatever additional checks the owner decides to add.
+
+# Per-artifact rules
+rules:
+  proposal:
+    - Must state Owner (Ruben or nathaliascode, per docs/ROADMAP.md).
+    - Must state the Linear issue id (RRG-NN).
+    - Must state Video timestamps covered (from the course video, as listed in the Linear issue).
+    - Must state Depends on (other OpenSpec change names or RRG ids this one needs merged first,
+      per docs/ROADMAP.md).
+    - Must state Course requirement covered (context management, sessions, human in the loop,
+      external MCP, selectable model provider, subagent research, or OpenSpec), if any.
+  specs:
+    - Write in English regardless of conversation language.
+    - Describe behavior and scenarios only.
+    - Reuse an existing capability path under openspec/specs/ instead of introducing a
+      near-duplicate when the change modifies behavior already owned by another capability.
+  design:
+    - Write in English regardless of conversation language.
+    - Name the modules and classes touched in the nar package (for example nar/tools/base.py,
+      ToolRegistry) and whether each is new or modified.
+    - List any new config keys (in ~/.nar/config.toml or .nar/config.toml) with defaults.
+  tasks:
+    - Write in English regardless of conversation language.
+    - "Group tasks under two headings, in this order: [specs], [nar]. Omit a heading only if the
+      change has no work in that repo."
+    - "The final task must be a manual verification checklist: run `nar` and walk through the
+      issue's \"done when\" criterion step by step, recording what was observed."
