@@ -28,7 +28,7 @@ Constraints:
 src/nar/
 ├── errors.py                 MODIFIED  + ProviderError
 ├── config/
-│   ├── models.py             MODIFIED  ProviderName enum, model resolved per provider
+│   ├── models.py             MODIFIED  ProviderName enum, DEFAULT_MODELS, model resolved per provider
 │   └── loader.py             MODIFIED  command-line override layer, unset-default handling
 ├── cli/main.py               MODIFIED  --provider/--model, real single mode
 └── providers/                NEW
@@ -38,7 +38,7 @@ src/nar/
     ├── retry.py              NEW  RetryPolicy, with_retries(), retryable-error classification
     ├── anthropic.py          NEW  AnthropicProvider
     ├── openai_compat.py      NEW  OpenAICompatibleProvider, OpenRouterProvider, OllamaProvider
-    └── factory.py            NEW  create_provider(config, on_retry) and DEFAULT_MODELS
+    └── factory.py            NEW  create_provider(config, on_retry), imports adapters on demand
 scripts/run_provider.py       NEW  developer runner
 ```
 
@@ -107,7 +107,7 @@ The retry wraps the **start** of a stream: if the failure happens before the fir
 | Other 4xx | `<provider> rejected the request (<status>): <API message>` |
 
 ### 7. Configuration
-`provider: ProviderName` (`StrEnum`: `anthropic`, `openrouter`, `ollama`), default `openrouter`; the loader's existing enum handling lists the allowed values in errors. `model: str | None = None`; a `model_validator(mode="after")` fills it from `DEFAULT_MODELS` when unset:
+`provider: ProviderName` (`StrEnum`: `anthropic`, `openrouter`, `ollama`), default `openrouter`; the loader's existing enum handling lists the allowed values in errors. `model: str | None = None`; a `model_validator(mode="after")` fills it from `DEFAULT_MODELS` when unset. `ProviderName` and `DEFAULT_MODELS` live in `config/models.py`, not in the providers package, so loading the configuration never imports the SDKs:
 
 | Provider | Default model |
 |---|---|
@@ -120,6 +120,8 @@ The loader builds its defaults layer from `NarConfig.model_construct()` dumped w
 `load_config(cwd, overrides=None)`: `overrides` is one more layer merged after the project file with source `command line`. No new config keys; API keys and `OLLAMA_HOST` are environment variables only (not in TOML, so they are never committed by accident).
 
 ### 8. CLI
+The SDKs take about 2 s to import, so `cli/main.py` imports `nar.providers` inside single mode only and the factory imports each adapter on demand; `nar --version` and `--show-config` stay at about 0.25 s.
+
 `--provider` is a `click.Choice` of the enum values (Click lists them in `--help` and in its usage error, exit code 2); `--model` is free text. Both feed `load_config(..., overrides=...)`. Single mode: `create_provider(config, on_retry=...)` → `provider.stream([Message.user(prompt)])` → each `TextDelta` printed with `click.echo(text, nl=False)` and flushed; a final newline at the end. No system prompt, history or tools (RRG-63). The interactive placeholder is unchanged.
 
 ### 9. Developer runner
