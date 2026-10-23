@@ -13,6 +13,10 @@ Running `nar` with a prompt argument SHALL process that one prompt and exit with
 - **WHEN** the user runs `nar "count from 1 to 20"` with a reachable provider
 - **THEN** the answer appears on standard output progressively while it is generated, ends with a newline, and the command exits with code 0
 
+#### Scenario: Answer cut by the output limit
+- **WHEN** the model stops because it reached the output token limit (for example, a reasoning model that spends the whole limit before writing text)
+- **THEN** whatever text was generated is printed, a warning on standard error says the answer was cut off by the output token limit, and the command exits with code 0
+
 #### Scenario: Provider failure in single mode
 - **WHEN** the user runs `nar "hello"` and the provider cannot be used (for example, its API key is missing)
 - **THEN** a one-line error is printed to standard error, nothing is printed to standard output, and the command exits with code 1
