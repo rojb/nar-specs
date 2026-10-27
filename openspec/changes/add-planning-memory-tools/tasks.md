@@ -48,4 +48,5 @@
   - OpenRouter, session 2 (new process): no tool call; answer "Tengo guardada una preferencia: respuesta_estilo: Prefieres respuestas cortas y con ejemplos en Python."; exit 0 ✔
   - Planning: the two-file summary prompt was answered without `todos` (the model's choice; the tool is optional). A three-step prompt asking for a plan produced `todos` with the checklist shown below each call: `[>]` on step 1, then `[x] [>] [ ]`, `[x] [x] [>]`, and finally all `[x]`; the answer was short with a Python example, following the saved preference ✔
   - `scripts/run_tool.py` memory save/list and todos as in the README ✔
-  - Ollama (`qwen3.5:4b`, CPU): running; Anthropic: **pending** (no `ANTHROPIC_API_KEY`)
+  - Ollama (`qwen3.5:4b`, CPU), session 1 "recuerda que mi lenguaje favorito es Rust": one timeout retry, then `memory(action="save", key="favorite_language", value="Mi lenguaje favorito es Rust")` ✓ saved, 238 s, exit 0 (no closing text) ✔; session 2 (new process) "¿cuál es mi lenguaje favorito?": called `memory(action="list")` although the entry was already in the system prompt, then answered "Tu lenguaje favorito es **Rust**."; 78 s, exit 0 ✔
+  - Anthropic: **pending** (no `ANTHROPIC_API_KEY`)
