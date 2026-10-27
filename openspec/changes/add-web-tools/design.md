@@ -42,6 +42,7 @@ pyproject.toml      MODIFIED  + httpx, beautifulsoup4, markdownify
 Schema: `query` (string, `minLength: 1`, required), `max_results` (integer, 1–10, optional, default 5); `additionalProperties: false`; `requires_approval = False`.
 - `POST https://html.duckduckgo.com/html/` with form `q=<query>`.
 - Status 202, 403 or 429, or a page whose form/markup mentions `anomaly`/`challenge` without results → error `DuckDuckGo refused the search (probably rate limiting); try again later`. Other non-200 statuses → `DuckDuckGo answered HTTP <code>`. Network errors → `could not reach DuckDuckGo: <reason>`.
+- DuckDuckGo sometimes answers a query that has results with its "No results found" page (a block with class `result--no-result`; seen on about a third of requests sent in quick bursts during implementation, while the same query worked seconds later). When that block appears, the request is repeated up to 2 times, 1.5 s apart, on the same client. If the last answer is still that page, the no-results message adds that DuckDuckGo sometimes answers this way and suggests trying again or rephrasing.
 - `parse_results(html)`: each `div.result` that is not `.result--ad`; title and link from `a.result__a`, snippet from `.result__snippet` (whitespace collapsed). A link of the form `//duckduckgo.com/l/?uddg=<encoded>` is decoded to the destination URL; protocol-relative links get `https:`.
 - Output, one block per result:
   ```
@@ -68,6 +69,7 @@ Offline: `httpx.MockTransport` injected through a module-level factory that the 
 
 ## Risks / Trade-offs
 
+- [DuckDuckGo returns spurious empty pages in bursts] → Up to 2 retries (Decision 3); a search can still take ~3 s longer or end empty, and the message tells the model to retry.
 - [DuckDuckGo changes its HTML or rate-limits] → Clear error results; parsing is isolated in `parse_results()` with fixture tests, so a markup change is a one-function fix.
 - [JavaScript-only sites return almost nothing] → The model sees a short page and can try another URL; out of scope here.
 - [Prompt injection from fetched pages] → See Decision 5.
