@@ -4,28 +4,28 @@
 
 ## [specs]
 
-- [ ] 0.1 Link this change to Linear RRG-62 (move the issue to In Progress and add the `nar-specs` change path as a link) and verify the link opens `openspec/changes/add-tool-framework/` on GitHub
+- [x] 0.1 Link this change to Linear RRG-62 (move the issue to In Progress and add the `nar-specs` change path as a link) and verify the link opens `openspec/changes/add-tool-framework/` on GitHub
 
 ## [nar]
 
 ## 1. Branch and dependencies
 
-- [ ] 1.1 In `nar/`, update `main` and create a branch from Linear's RRG-62 branch name; verify `git status` shows the new branch
-- [ ] 1.2 Add `rich` and `jsonschema` (lower bounds only) to `pyproject.toml` dependencies. RRG-61 also edits this list (`anthropic`, `openai`), so if the merge conflicts, resolve it by keeping both sets; verify `pip install -e ".[dev]"` succeeds and `python -c "import rich, jsonschema"` works
+- [x] 1.1 In `nar/`, update `main` and create a branch from Linear's RRG-62 branch name; verify `git status` shows the new branch
+- [x] 1.2 Add `rich` and `jsonschema` (lower bounds only) to `pyproject.toml` dependencies. RRG-61 also edits this list (`anthropic`, `openai`), so if the merge conflicts, resolve it by keeping both sets; verify `pip install -e ".[dev]"` succeeds and `python -c "import rich, jsonschema"` works
 
 ## 2. Errors and tool contract
 
-- [ ] 2.1 Add `ToolError(NarError)` to `nar/errors.py` with a test in `tests/test_errors.py`; verify `pytest tests/test_errors.py` passes and `ToolError` is an instance of `NarError`
-- [ ] 2.2 Implement `nar/tools/base.py` (`Tool` ABC with `name`, `description`, `parameters`, `requires_approval = False`, abstract `execute()`, `definition()` returning a deep copy; frozen `ToolContext(cwd)`; frozen `ToolResult` with `ok()`/`error()`; `ToolDefinition` TypedDict; `NAME_PATTERN`) from design.md §2-3 and a minimal `nar/tools/__init__.py`, with `tests/test_tools_base.py`; verify `pytest tests/test_tools_base.py` passes: a subclass without `execute` cannot be instantiated, `definition()` has exactly `name`, `description`, `parameters` and mutating it does not change the tool, `ToolResult.error("x").output == "x"` with `is_error` true
+- [x] 2.1 Add `ToolError(NarError)` to `nar/errors.py` with a test in `tests/test_errors.py`; verify `pytest tests/test_errors.py` passes and `ToolError` is an instance of `NarError`
+- [x] 2.2 Implement `nar/tools/base.py` (`Tool` ABC with `name`, `description`, `parameters`, `requires_approval = False`, abstract `execute()`, `definition()` returning a deep copy; frozen `ToolContext(cwd)`; frozen `ToolResult` with `ok()`/`error()`; `ToolDefinition` TypedDict; `NAME_PATTERN`) from design.md §2-3 and a minimal `nar/tools/__init__.py`, with `tests/test_tools_base.py`; verify `pytest tests/test_tools_base.py` passes: a subclass without `execute` cannot be instantiated, `definition()` has exactly `name`, `description`, `parameters` and mutating it does not change the tool, `ToolResult.error("x").output == "x"` with `is_error` true
 
 ## 3. Validation and truncation
 
-- [ ] 3.1 Implement `nar/tools/validation.py` (`validate_arguments(schema, arguments) -> list[str]` using `Draft202012Validator`, message table from design.md §4, no type coercion) with `tests/test_tools_validation.py`; verify `pytest tests/test_tools_validation.py` passes for: missing `path` gives `missing required argument 'path'`, `offset="ten"` names `offset` and `integer`, unknown argument, `minimum` violation, a valid call returns `[]`
-- [ ] 3.2 Implement `nar/tools/limits.py` (`MAX_OUTPUT_CHARS = 30_000`, `truncate_output()` where head plus marker never exceeds the limit) with `tests/test_tools_limits.py`; verify `pytest tests/test_tools_limits.py` passes: 50,000 characters become `<= 30000` characters ending in `[output truncated: N characters omitted]` with `N >= 20000`, and 100 characters are returned unchanged
+- [x] 3.1 Implement `nar/tools/validation.py` (`validate_arguments(schema, arguments) -> list[str]` using `Draft202012Validator`, message table from design.md §4, no type coercion) with `tests/test_tools_validation.py`; verify `pytest tests/test_tools_validation.py` passes for: missing `path` gives `missing required argument 'path'`, `offset="ten"` names `offset` and `integer`, unknown argument, `minimum` violation, a valid call returns `[]`
+- [x] 3.2 Implement `nar/tools/limits.py` (`MAX_OUTPUT_CHARS = 30_000`, `truncate_output()` where head plus marker never exceeds the limit) with `tests/test_tools_limits.py`; verify `pytest tests/test_tools_limits.py` passes: 50,000 characters become `<= 30000` characters ending in `[output truncated: N characters omitted]` with `N >= 20000`, and 100 characters are returned unchanged
 
 ## 4. Registry
 
-- [ ] 4.1 Implement `nar/tools/registry.py` (`ToolRegistry` with `register`, `get`, `names`, `definitions`, `execute`; name pattern and `check_schema` plus `type == "object"` checks at registration; `execute` pipeline lookup -> validate -> run in `try/except` -> truncate, per design.md §5) and re-export the public names from `nar/tools/__init__.py`, with `tests/test_tools_registry.py` using stub tools; verify `pytest tests/test_tools_registry.py` passes for: name `read-file!` is rejected naming the tool, a duplicate is rejected and the original tool is kept, an unknown tool `delete_everything` gives an error result listing the available names, export has exactly `name`/`description`/`parameters` in registration order, invalid arguments do not run the stub tool, a stub that raises `RuntimeError("boom")` gives an error result containing `RuntimeError` and `boom`, a stub that raises `ToolError` gives its bare message, and a stub returning 50,000 characters comes back truncated
+- [x] 4.1 Implement `nar/tools/registry.py` (`ToolRegistry` with `register`, `get`, `names`, `definitions`, `execute`; name pattern and `check_schema` plus `type == "object"` checks at registration; `execute` pipeline lookup -> validate -> run in `try/except` -> truncate, per design.md §5) and re-export the public names from `nar/tools/__init__.py`, with `tests/test_tools_registry.py` using stub tools; verify `pytest tests/test_tools_registry.py` passes for: name `read-file!` is rejected naming the tool, a duplicate is rejected and the original tool is kept, an unknown tool `delete_everything` gives an error result listing the available names, export has exactly `name`/`description`/`parameters` in registration order, invalid arguments do not run the stub tool, a stub that raises `RuntimeError("boom")` gives an error result containing `RuntimeError` and `boom`, a stub that raises `ToolError` gives its bare message, and a stub returning 50,000 characters comes back truncated
 
 ## 5. read_file tool
 
