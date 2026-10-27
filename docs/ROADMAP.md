@@ -33,6 +33,7 @@ carga relativa entre changes, no un compromiso de fechas.
 |---|---|---|---|---|---|
 | `add-tool-framework` | RRG-62 | Ruben | Base `Tool` (name, description, parámetros JSON-schema, execute, `ToolResult`), `ToolRegistry` que exporta definiciones neutrales (name, description, parameters) que los adapters de RRG-61 convierten, tool `read_file`, render Rich de llamadas y errores, flag `requires_approval`. Video: 02:30:46, 03:09:17, 03:48:31, 10:03:11. | RRG-60 | M |
 | `add-agent-loop` | RRG-63 | nathaliascode | Loop agéntico con límite de turnos, `ContextManager` (historial, conteo de tokens, system prompt + AGENTS.md), system prompt, modo único + REPL interactivo con salida Rich en streaming. Video: 01:15:05, 02:05:35, 04:34:55, 06:13:08, 06:29:22. | RRG-61, RRG-62 | M |
+| `add-deepseek-provider` | RRG-79 | Ruben | Proveedor `deepseek` como cuarto proveedor seleccionable (`--provider deepseek`, `provider = "deepseek"`): reutiliza el adaptador compatible OpenAI de RRG-61, credencial `DEEPSEEK_API_KEY`, errores claros (key faltante, 401, saldo insuficiente, modelo desconocido); cierra la verificación con agente real de RRG-64. Video: —. | RRG-61, RRG-63 | S |
 
 ## Fase 2 — Herramientas
 
@@ -95,7 +96,7 @@ carga relativa entre changes, no un compromiso de fechas.
 | Sesiones con historial | RRG-76 (+ RRG-77 checkpoints) |
 | Human in the loop (aprobaciones) | RRG-69 |
 | Conexión a servidores MCP externos (Jira, Teams, Linear) | RRG-74 |
-| Proveedor de modelo seleccionable (Anthropic, OpenRouter, Ollama) | RRG-61 (+ `/model` en RRG-78) |
+| Proveedor de modelo seleccionable (Anthropic, OpenRouter, Ollama) | RRG-61 (+ RRG-79 DeepSeek, `/model` en RRG-78) |
 | Investigación sobre subagentes | RRG-73 (`docs/SUBAGENTES.md`) |
 | Uso de OpenSpec | este repo, todos los changes |
 
@@ -103,8 +104,8 @@ carga relativa entre changes, no un compromiso de fechas.
 
 | Persona | S | M | L | Changes |
 |---|---|---|---|---|
-| Ruben | 3 | 5 | 1 | RRG-60, 65, 71 (S); 62, 64, 69, 72, 78 (M); 74 (L) |
+| Ruben | 4 | 5 | 1 | RRG-60, 65, 71, 79 (S); 62, 64, 69, 72, 78 (M); 74 (L) |
 | nathaliascode | 4 | 5 | 1 | RRG-66, 67, 75, 77 (S); 61, 63, 68, 70, 76 (M); 73 (L) |
 
-Total: 19 changes. Carga equilibrada dentro de la estimación gruesa (la única diferencia es una
-S más para nathaliascode).
+Total: 20 changes. Carga equilibrada: 10 changes por persona con la misma distribución de
+tamaños (4 S, 5 M, 1 L) tras agregar RRG-79.
