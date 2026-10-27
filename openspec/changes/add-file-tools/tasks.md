@@ -48,7 +48,7 @@
 
 ## 9. Delivery
 
-- [ ] 9.1 Run `ruff check .`, `ruff format --check .` and `pytest`; verify all three pass, then push the branch and open a PR referencing RRG-64 (open a second PR for the second half if the review workload split is used)
+- [x] 9.1 Run `ruff check .`, `ruff format --check .` and `pytest`; verify all three pass, then push the branch and open a PR referencing RRG-64 (open a second PR for the second half if the review workload split is used)
 
 ## 10. Manual verification (RRG-64 "done when")
 
