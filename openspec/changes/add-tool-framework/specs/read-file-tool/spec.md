@@ -22,7 +22,7 @@ Defines the built-in `read_file` tool that lets the agent read text files from t
 
 #### Scenario: Partial read
 - **WHEN** `read_file` is called on a 100-line file with `offset` 10 and `limit` 5
-- **THEN** the result contains lines 10 to 14 numbered 10 to 14, and states that lines 10–14 of 100 are shown
+- **THEN** the result contains lines 10 to 14 numbered 10 to 14, and states that lines 10-14 of 100 are shown
 
 #### Scenario: Offset past the end
 - **WHEN** `read_file` is called on a 100-line file with `offset` 150
@@ -30,7 +30,7 @@ Defines the built-in `read_file` tool that lets the agent read text files from t
 
 #### Scenario: Default limit on a long file
 - **WHEN** `read_file` is called without `limit` on a 5,000-line file
-- **THEN** the first 2,000 lines are returned and the result states that lines 1–2000 of 5000 are shown
+- **THEN** the first 2,000 lines are returned and the result states that lines 1-2000 of 5000 are shown
 
 ### Requirement: Read errors
 `read_file` SHALL return an error result, never crash, when the file cannot be read as text.

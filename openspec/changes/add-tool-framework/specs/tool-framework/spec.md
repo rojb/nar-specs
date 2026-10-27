@@ -9,9 +9,9 @@ Defines what a tool is in `nar`, how tool calls are validated, executed and repo
 ### Requirement: Tool definition
 Every tool SHALL expose a name, a description written for the model, a JSON Schema (type `object`) describing its parameters, and whether it requires user approval before running. Tool names SHALL match `^[a-zA-Z][a-zA-Z0-9_]{0,63}$` so they are accepted by every supported provider.
 
-#### Scenario: Definition exposes all fields
-- **WHEN** the definition of the built-in `read_file` tool is requested
-- **THEN** it contains the name `read_file`, a non-empty description, a parameters schema of type `object`, and `requires_approval` set to false
+#### Scenario: Tool exposes all fields
+- **WHEN** the built-in `read_file` tool is inspected
+- **THEN** it exposes the name `read_file`, a non-empty description, a parameters schema of type `object`, and `requires_approval` set to false
 
 #### Scenario: Invalid tool name
 - **WHEN** a tool named `read-file!` is registered

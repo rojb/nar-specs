@@ -31,7 +31,7 @@ carga relativa entre changes, no un compromiso de fechas.
 
 | Change | Issue | Owner | Contenido | Depende de | Tamaño |
 |---|---|---|---|---|---|
-| `add-tool-framework` | RRG-62 | Ruben | Base `Tool` (name, description, parámetros JSON-schema, execute, `ToolResult`), `ToolRegistry` que exporta schemas por provider, tool `read_file`, render Rich de llamadas y errores, flag `requires_approval`. Video: 02:30:46, 03:09:17, 03:48:31, 10:03:11. | RRG-60 | M |
+| `add-tool-framework` | RRG-62 | Ruben | Base `Tool` (name, description, parámetros JSON-schema, execute, `ToolResult`), `ToolRegistry` que exporta definiciones neutrales (name, description, parameters) que los adapters de RRG-61 convierten, tool `read_file`, render Rich de llamadas y errores, flag `requires_approval`. Video: 02:30:46, 03:09:17, 03:48:31, 10:03:11. | RRG-60 | M |
 | `add-agent-loop` | RRG-63 | nathaliascode | Loop agéntico con límite de turnos, `ContextManager` (historial, conteo de tokens, system prompt + AGENTS.md), system prompt, modo único + REPL interactivo con salida Rich en streaming. Video: 01:15:05, 02:05:35, 04:34:55, 06:13:08, 06:29:22. | RRG-61, RRG-62 | M |
 
 ## Fase 2 — Herramientas
