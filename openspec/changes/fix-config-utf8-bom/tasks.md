@@ -18,8 +18,9 @@
 ## 3. Checks and delivery
 
 - [x] 3.1 Run `ruff check .`, `ruff format --check .` and `pytest -q`; verify all pass
-- [ ] 3.2 Commit (`fix(config): ...` with `(RRG-80)`), push, open a PR referencing the issue, merge after review
+- [x] 3.2 Commit (`fix(config): ...` with `(RRG-80)`), push, open a PR referencing the issue, merge after review
 
 ## 4. Manual verification
 
-- [ ] 4.1 In a temp folder on Windows PowerShell 5.1, run `New-Item -ItemType Directory .nar; 'approval = "yolo"' | Set-Content -Encoding utf8 .nar\config.toml` (writes a BOM; confirm with `Format-Hex .nar\config.toml` showing `EF BB BF` first), then `nar --show-config` -> prints `approval = yolo  (.nar/config.toml)` and exit 0 (before the fix it printed `invalid TOML ... (line 1)`); write `approval = "always"` the same way -> exit 1 naming `approval` and the allowed values; write the bytes `FF FE` into the file -> exit 1 with `cannot read` naming the file; `nar --version` still prints `nar, version 0.1.0`. Record date, shell version and nar commit
+- [x] 4.1 In a temp folder on Windows PowerShell 5.1, run `New-Item -ItemType Directory .nar; 'approval = "yolo"' | Set-Content -Encoding utf8 .nar\config.toml` (writes a BOM; confirm with `Format-Hex .nar\config.toml` showing `EF BB BF` first), then `nar --show-config` -> prints `approval = yolo  (.nar/config.toml)` and exit 0 (before the fix it printed `invalid TOML ... (line 1)`); write `approval = "always"` the same way -> exit 1 naming `approval` and the allowed values; write the bytes `FF FE` into the file -> exit 1 with `cannot read` naming the file; `nar --version` still prints `nar, version 0.1.0`. Record date, shell version and nar commit
+  - Observed on 2026-10-27, Windows 11, Windows PowerShell 5.1.26100.9711, fix code later merged as nar PR #11 (merge 6c14b3d): `Format-Hex` showed `EF BB BF` first; `nar --show-config` printed `approval = yolo  (.nar/config.toml)` and exit 0; `approval = "always"` -> `invalid value "always" for setting 'approval' ... allowed values: ask, auto-edit, yolo`, exit 1; bytes `FF FE` -> `cannot read <file>: 'utf-8' codec can't decode byte 0xff`, exit 1; `nar --version` printed `nar, version 0.1.0`. Before the fix the BOM file gave `invalid TOML ... (line 1): Invalid statement`.
