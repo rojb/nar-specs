@@ -42,7 +42,8 @@
 
 ## 7. Delivery
 
-- [ ] 7.1 For each PR (A, B, C): run `ruff check .`, `ruff format --check .` and `pytest`; verify all three pass on Windows, make small commits with Conventional Commit messages (for example `feat(tools): add tool call previews (RRG-69)`, `feat(agent): ask the user before approval-required tools (RRG-69)`, `feat(cli): add --approval option (RRG-69)`), push the branch and open the PR referencing RRG-69, chained on the previous one (`git diff --stat main` of each PR near the sizes in the note above)
+- [x] 7.1 For each PR (A, B, C): run `ruff check .`, `ruff format --check .` and `pytest`; verify all three pass on Windows, make small commits with Conventional Commit messages (for example `feat(tools): add tool call previews (RRG-69)`, `feat(agent): ask the user before approval-required tools (RRG-69)`, `feat(cli): add --approval option (RRG-69)`), push the branch and open the PR referencing RRG-69, chained on the previous one (`git diff --stat main` of each PR near the sizes in the note above)
+  - Done on 2026-10-31 as four chained PRs instead of three, because PR B measured 1,078 changed lines and splits cleanly into the gate and the terminal prompter: nar PR #12 (A, tool previews, `4591113`, base `main`, +574 -96), #13 (B1, approval gate, `87a9307`, +676 -19), #14 (B2, terminal prompter, `61a1e41`, +382 -1), #15 (C, CLI wiring and README, `39eddd5` + `317050a`, +319 -20, `Closes RRG-69`). Each PR targets the previous branch and shows only its slice. Each slice checked on Windows in a detached worktree: `pytest` 628 / 660 / 686 / 701 passed, `ruff check .` and `ruff format --check .` clean on every slice. #12 and #13 exceed the 400-line guide mostly in tests (~330 and ~515 lines) and ask for `size:exception`.
 
 ## 8. Manual verification (RRG-69 done when)
 
