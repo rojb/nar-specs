@@ -60,7 +60,7 @@ Tool output sent to the model SHALL be limited to 30,000 characters. Longer outp
 - **THEN** the result contains the first part of the output within the limit followed by a marker saying 20,000 or more characters were omitted
 
 ### Requirement: Tool activity display
-When a tool is called, the user SHALL see the tool name and a one-line summary of its arguments; when it finishes, the user SHALL see whether it succeeded or failed. Errors SHALL be visually distinct from successes and show the error message. When a successful result carries a diff of a file change, the user SHALL also see that diff, with added lines and removed lines visually distinct from each other and from unchanged context lines.
+When a tool is called, the user SHALL see the tool name and a one-line summary of its arguments; when it finishes, the user SHALL see whether it succeeded or failed. Errors SHALL be visually distinct from successes and show the error message; when an error result carries a short summary, the user SHALL see that summary instead of the full message, while the model still receives the full message. When a successful result carries a diff of a file change, the user SHALL also see that diff, with added lines and removed lines visually distinct from each other and from unchanged context lines.
 
 #### Scenario: Successful call shown
 - **WHEN** `read_file` runs successfully on `pyproject.toml`
@@ -69,6 +69,10 @@ When a tool is called, the user SHALL see the tool name and a one-line summary o
 #### Scenario: Failed call shown
 - **WHEN** a tool call ends in an error result
 - **THEN** the terminal shows the tool name with an error indicator in a distinct color and the error message
+
+#### Scenario: Failed call with a summary
+- **WHEN** a tool call ends in an error result that carries the summary `timed out after 5 s` and a long message with the output captured before the failure
+- **THEN** the terminal shows the error indicator and `timed out after 5 s`, and does not show the long message
 
 #### Scenario: Diff shown for a file change
 - **WHEN** `edit_file` succeeds and its result carries a diff that removes `timeout = 10` and adds `timeout = 30`
