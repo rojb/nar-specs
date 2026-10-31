@@ -10,7 +10,7 @@
 
 ## 1. Branch
 
-- [ ] 1.1 In `nar/`, update `main` and create the branch `rubenjustiniano96/rrg-69-add-approval-system-human-in-the-loop-con-niveles-de-autonomia` (or the branch name Linear shows for RRG-69); verify `git status` shows the new branch and a clean tree, and that `pytest -q` passes on it before any change (record any test that already fails)
+- [ ] 1.1 In `nar/`, update `main` and create the branch `rubenjustiniano96/rrg-69-add-approval-system-human-in-the-loop-con-niveles-de` (the branch name Linear shows for RRG-69); verify `git status` shows the new branch and a clean tree, and that `pytest -q` passes on it before any change (record any test that already fails)
 
 ## 2. Tool previews and project-edit declaration (PR A)
 

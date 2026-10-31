@@ -19,7 +19,7 @@ Today the agent can change files and run commands, but `nar` cannot ask the user
   - **A call that cannot run is not asked about:** when the preview already knows the call would fail (`old_string` not found, a command on the safety list), the model receives that error directly and the user is not interrupted.
 - **Autonomy levels** `ask`, `auto-edit` and `yolo`, set with the existing `approval` configuration key and a new `--approval <level>` command-line option:
   - `ask` (default): every approval-required call is asked.
-  - `auto-edit`: `write_file` and `edit_file` run without asking when the file is inside the working directory; `shell`, edits outside the working directory and any other approval-required tool are still asked.
+  - `auto-edit`: `write_file` and `edit_file` run without asking when the file is inside the working directory and not under `.git/` or `.nar/`; `shell`, edits outside the working directory or under `.git/` / `.nar/`, and any other approval-required tool are still asked.
   - `yolo`: nothing is asked (unchanged behavior).
 - **Rejection goes back to the model.** When the user says no, the tool does not run and the model receives an error result saying the user rejected the call, with the reason when the user typed one (an optional line after "no"), and an instruction not to repeat the same call but to propose something else.
 - **Never hang.** When nar cannot ask (standard input or standard error is not a terminal, as in `echo "..." | nar` or `nar "..." 2> log`), approval-required calls are refused with a clear error result saying how to allow them (`--approval`), the same way for every such call. End of input at the prompt counts as "no". Ctrl+C at the prompt cancels the request like anywhere else.
