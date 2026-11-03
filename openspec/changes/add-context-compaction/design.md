@@ -40,10 +40,10 @@ src/nar/config/models.py        MODIFIED  context_window, context_threshold, DEF
 ### 2. Configuration
 | Key | Type | Default |
 |---|---|---|
-| `context_window` | int, at least 1000 | by provider: `anthropic` 200000, `openrouter` 128000, `deepseek` 128000, `ollama` 8192 |
+| `context_window` | int, at least 1000 | by provider: `anthropic` 200000, `openrouter` 128000, `deepseek` 128000, `ollama` 4096 |
 | `context_threshold` | int, 1 to 100 (percent) | 80 |
 
-`context_window` follows the same pattern as `model`: `None` in the field, resolved by the after-validator from `DEFAULT_CONTEXT_WINDOWS`. The defaults are conservative because nar cannot know the model: `openrouter/auto` picks one per call, and Ollama's real context depends on how the server was started. **Alternative rejected:** a table per model name, which goes stale and misses most OpenRouter and Ollama models.
+`context_window` follows the same pattern as `model`: `None` in the field, resolved by the after-validator from `DEFAULT_CONTEXT_WINDOWS`. The defaults are conservative because nar cannot know the model: `openrouter/auto` picks one per call, and Ollama's real context depends on how the server was started (`ollama ps` showed 4096 here, which is why its default is 4096, a size at which compaction runs often because the system prompt and tools take about 2,400 tokens). **Alternative rejected:** a table per model name, which goes stale and misses most OpenRouter and Ollama models.
 
 ### 3. `ContextManager`
 - `mark()` returns a frozen `ContextSnapshot` (tuple of messages, reported tokens and position) and `rollback(snapshot)` restores it. Messages are immutable, so the copy only costs the tuple. **Why:** after a compaction a list position means nothing; a snapshot also undoes the compaction itself, as the spec asks. **Alternative rejected:** forbidding rollback after a compaction, which would keep half a cancelled request.
