@@ -13,7 +13,7 @@ Constraints:
 
 **Goals:**
 - A closed terminal loses at most the turn in progress.
-- No change to the agent loop.
+- No change to how the agent loop behaves.
 - Files that RRG-77 can extend.
 
 **Non-Goals:**
@@ -27,6 +27,7 @@ src/nar/session/__init__.py   NEW       re-exports
 src/nar/session/store.py      NEW       Session, SessionStore, SessionFileError, sessions_dir()
 src/nar/session/recorder.py   NEW       SessionRecorder
 src/nar/ui/session_view.py    NEW       render_history(), render_sessions()
+src/nar/agent/loop.py         MODIFIED  measure_tools(), so the usage line counts tool definitions after a resume
 src/nar/cli/main.py           MODIFIED  --resume; run_single resumes
 src/nar/cli/runner.py         MODIFIED  run_request(recorder=...), open_session(), switch_session()
 src/nar/cli/repl.py           MODIFIED  creates the recorder and shows the history
@@ -52,7 +53,7 @@ Writes follow `MemoryStore`: `tempfile.mkstemp` in the same folder (created with
 - With no messages it deletes the file if there is one, so a cancelled first request leaves nothing.
 - `OSError` warns once, until a save succeeds again. `updated_at` is set on each save.
 
-`Agent` does not change: saving is driven from the events, like the display.
+Saving is driven from the events, like the display, so the loop does not know about sessions.
 
 ### 4. Resuming
 `open_session(config, cwd, resume, agent, view)` builds the recorder. With `resume` set (`""` means latest), it loads the session, calls `context.replace_messages`, and warns about a different folder or notes a different model. The session keeps its original `cwd` for the listing unless it is resumed elsewhere, where `cwd` becomes the current folder, so `--resume` finds it there next time. Provider and model are updated to the current ones on the next save.

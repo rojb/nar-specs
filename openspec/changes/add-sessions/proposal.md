@@ -35,7 +35,7 @@ None. The new option and commands are described in `sessions`, because the specs
 
 ## Impact
 
-- **Code (`nar` repo):** new package `src/nar/session/` (`store.py`, `recorder.py`); `src/nar/cli/main.py` (`--resume`), `src/nar/cli/runner.py`, `src/nar/cli/repl.py`, `src/nar/cli/slash.py`; new `src/nar/ui/session_view.py`; README.
+- **Code (`nar` repo):** new package `src/nar/session/` (`store.py`, `recorder.py`); `src/nar/agent/loop.py` (`measure_tools`), `src/nar/cli/main.py` (`--resume`), `src/nar/cli/runner.py`, `src/nar/cli/repl.py`, `src/nar/cli/slash.py`; new `src/nar/ui/session_view.py`; README.
 - **User filesystem:** writes `~/.nar/sessions/<id>.json`, readable only by the user on Linux and macOS. These files hold everything the conversation held, including file contents and command output, in plain text, and they are never removed by `nar`.
 - **Dependencies:** none new.
 - **Specs:** only a new capability, so it can be archived before or after `add-agent-loop`, `add-mcp-client` and `add-context-compaction`.
