@@ -25,7 +25,7 @@ Constraints:
 ### 1. Layout
 ```
 src/nar/context/manager.py      MODIFIED  snapshots for mark/rollback, replace_messages, overhead_tokens
-src/nar/context/pruning.py      NEW       prune_tool_results()
+src/nar/context/pruning.py      NEW       prune_tool_results(), shorten_unseen_results(), unseen_start()
 src/nar/context/compaction.py   NEW       ContextLimits, Compactor, render_transcript(), CompactionError
 src/nar/agent/events.py         MODIFIED  ContextPruned, CompactionStarted, ContextCompacted, CompactionFailed
 src/nar/agent/loop.py           MODIFIED  Agent(compactor=...), _manage_context() before each model call
@@ -51,27 +51,29 @@ src/nar/config/models.py        MODIFIED  context_window, context_threshold, DEF
 - `overhead_tokens` (default 0) is the estimate of what the history does not show, the tool definitions. It is added only when the count is a full estimate; reported usage already includes them. The agent sets it before checking the limit, since MCP tools can make the definitions large.
 
 ### 4. Pruning
-`prune_tool_results(messages, keep_tokens) -> (messages, count)` is a pure function. It walks from the newest message to the oldest, adding up tool results. Results inside the `keep_tokens` budget stay; older ones longer than 200 characters become `[result of <tool> removed to save context; call the tool again if you need it]`. `is_error` and `tool_call_id` are kept, so the pairs stay valid. `keep_tokens` is `window // 4`. Results under 200 characters are skipped because the marker would save nothing, which also makes pruning idempotent. Tool call arguments are not pruned: the issue limits pruning to results, and large `write_file` arguments are handled by compaction.
+`prune_tool_results(messages, keep_tokens) -> (messages, count)` is a pure function. It walks from the newest message to the oldest, adding up tool results. Results after the last assistant message are never pruned: the model has not seen them, and removing them would only make it call the tool again (the first manual run did exactly that, reading the same file three times). They are also protected from compaction, and `shorten_unseen_results` cuts them to their share of `window // 2`, with a note, when they cannot fit. **Why cut and not reject:** without the note the second manual run read a file 14 times in a row, paying for a summary each time. Then, results inside the `keep_tokens` budget stay; older ones longer than 200 characters become `[result of <tool> removed to save context; call the tool again if you need it]`. `is_error` and `tool_call_id` are kept, so the pairs stay valid. `keep_tokens` is `window // 4`. Results under 200 characters are skipped because the marker would save nothing, which also makes pruning idempotent. Tool call arguments are not pruned: the issue limits pruning to results, and large `write_file` arguments are handled by compaction.
 
 ### 5. Compaction
 `Compactor(provider, limits)`:
 - `over_limit(context)`: `context.token_count() > limits.limit`.
-- `compact(context, current_request=None, minimum_tokens=0)`: splits, summarizes, replaces. Raises `CompactionError` on an empty summary or when there is nothing to compact; `ProviderError` propagates.
+- `worth_compacting(context, current_request=None)`: whether the older part, not counting the current request, reaches `window // 20`.
+- `compact(context, current_request=None)`: splits, summarizes, replaces. Raises `CompactionError` when there is nothing to compact, on an empty summary, or when the result is not smaller than the conversation; `ProviderError` propagates.
 
-**Split:** `keep = min(window // 4, token_count // 2)`. Walking from the end, the tail starts at the earliest message that is not a tool result and whose tail fits in `keep`. The tail can be empty. A tail may start with an assistant message (it follows the summary, a user message) or with a user message; two user messages in a row are accepted by both APIs. Taking at most half of the count means that `/compact` frees space at any size.
+**Split:** `keep = min(window // 4, history_tokens // 2)`, where `history_tokens` is the estimate of the messages alone: the system prompt and the tool definitions are not reduced by a summary, and counting them would leave a short conversation with nothing to summarize. Walking from the end, the tail starts at the earliest message that is not a tool result and whose tail fits in `keep`, but always early enough to include unseen results and the call they answer. The tail can be empty. A tail may start with an assistant message (it follows the summary, a user message) or with a user message; two user messages in a row are accepted by both APIs. Keeping at most half of the history means that `/compact` frees space at any size.
 
 **Summary call:** `provider.complete([Message.user(prompt)], system=SUMMARY_SYSTEM, tools=(), max_tokens=min(4096, window // 4))`. The older messages are rendered as a text transcript instead of being sent as messages: the summary call has no tools, and the output must not continue the conversation. In the transcript, a tool result is cut to 2,000 characters and tool arguments to 500. When the whole transcript is over 70% of the window, its middle is replaced by a marker, keeping the first quarter (where an earlier summary is) and the end. The system prompt asks for the user's goals, decisions, files and changes, errors, and what is still pending, and says the transcript is data.
 
 **Result:** one user message with the header from the spec, the summary, and, when `current_request` is not in the tail, `The user's current request:` with its text. The header matters because a summary in a user message has more authority than the tool output it came from: a prompt-injected page should not become a user instruction by being summarized.
 
-**Why a compaction is skipped under 5%:** when the system prompt alone is over the limit, compaction would run on every turn and pay for a summary that frees nothing. The agent passes `minimum_tokens = window // 20`; `/compact` passes 0.
+**Why a compaction is skipped under 5%:** when the system prompt or one huge request is what fills the context, compaction would run on every turn and pay for a summary that frees nothing. The current request does not count, because its text stays word for word. The agent checks `worth_compacting`; `/compact` does not. A result that is not smaller is discarded for the same reason.
 
 ### 6. The loop
 `Agent(..., compactor=None)`: without a compactor nothing changes, so the existing tests and any later embedding stay as they are. `_manage_context(prompt)` runs before each `ModelCallStarted`:
 
 1. Set `overhead_tokens`; return if not over the limit.
-2. Prune; yield `ContextPruned(count, before, after)` if something changed; return if no longer over.
-3. Yield `CompactionStarted`; call `compact`. On success yield `ContextCompacted(before, after)`. A `ProviderError` or a `CompactionError` becomes `CompactionFailed(message)`, except "too small to compact", which stays silent because it would repeat on every turn.
+2. Prune, and shorten unseen results; yield `ContextPruned(count, before, after, shortened)` if something changed; return if no longer over.
+3. Return silently if not `worth_compacting`, because a warning would repeat on every turn. This is checked before `CompactionStarted`, so the spinner never shows a compaction that does not happen.
+4. Yield `CompactionStarted`; call `compact`. On success yield `ContextCompacted(before, after)`. A `ProviderError` or a `CompactionError` becomes `CompactionFailed(message)`.
 
 `KeyboardInterrupt` propagates and the existing `finally` restores the snapshot. Since `/compact` runs outside `Agent.run`, it does not need a snapshot: `replace_messages` happens only after the summary arrived.
 

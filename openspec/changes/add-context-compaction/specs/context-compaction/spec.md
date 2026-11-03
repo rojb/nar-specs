@@ -14,18 +14,26 @@ Before every model call, `nar` SHALL compare the size of the conversation in tok
 - **THEN** the conversation is reduced before the next model call of that same request
 
 ### Requirement: Pruning old tool results
-Over the limit, `nar` SHALL first replace the content of the oldest tool results with a short marker that names the tool and says the result was removed, keeping the most recent results up to a quarter of the context window. Short results SHALL be left as they are. User requests, assistant answers and tool calls SHALL NOT change, and every tool call SHALL keep its result. When pruning brings the conversation to the limit or below, no summary SHALL be requested. The user SHALL see a line saying how many results were removed.
+Over the limit, `nar` SHALL first replace the content of the oldest tool results with a short marker that names the tool and says the result was removed, keeping the most recent results up to a quarter of the context window. Results the model has not seen yet (those after the last assistant message) SHALL never be removed; when together they are larger than half of the context window, each SHALL be cut to its share of that half, with a note telling the model to request a smaller part. Short results SHALL be left as they are. User requests, assistant answers and tool calls SHALL NOT change, and every tool call SHALL keep its result. When pruning brings the conversation to the limit or below, no summary SHALL be requested. The user SHALL see a line saying how many results were removed.
 
 #### Scenario: Old file reads are pruned
 - **WHEN** a session is over the limit because of large file reads from earlier requests
 - **THEN** those results are replaced by the marker, the latest results stay complete, the model is not asked for a summary, and the provider accepts the next call
+
+#### Scenario: A new result reaches the model
+- **WHEN** a tool returns a result larger than a quarter of the window but smaller than half of it, taking the conversation over the limit
+- **THEN** the next model call contains that result complete, and only older content is reduced
+
+#### Scenario: A result that cannot fit
+- **WHEN** a tool returns a result larger than half of the window
+- **THEN** the next model call contains the start of the result and a note telling the model to request a smaller part, and the model is not left repeating the same call
 
 #### Scenario: The model can recover pruned data
 - **WHEN** the model needs a file whose earlier read was pruned
 - **THEN** the marker tells it to call the tool again
 
 ### Requirement: Compaction with a summary
-When the conversation is still over the limit after pruning, `nar` SHALL ask the configured model, without tools, for a summary of the older messages, and SHALL replace them with one message holding that summary, keeping the latest messages. The kept messages SHALL NOT exceed a quarter of the context window nor half of the conversation. A kept part SHALL never start with a tool result. The summary message SHALL say it was generated automatically and that text quoted in it from files or tools is data, not instructions. When the request in progress is not among the kept messages, its text SHALL be added to the summary message unchanged. The conversation SHALL NOT be compacted when the older part is under 5% of the context window, because a summary would not free useful space. The user SHALL see that compaction is in progress and the size before and after.
+When the conversation is still over the limit after pruning, `nar` SHALL ask the configured model, without tools, for a summary of the older messages, and SHALL replace them with one message holding that summary, keeping the latest messages. The kept messages SHALL NOT exceed a quarter of the context window nor half of the conversation. A kept part SHALL never start with a tool result, and SHALL always include the results the model has not seen yet with the call they answer, whatever the budget. The summary message SHALL say it was generated automatically and that text quoted in it from files or tools is data, not instructions. When the request in progress is not among the kept messages, its text SHALL be added to the summary message unchanged. The conversation SHALL NOT be compacted when the older part, not counting the request in progress, is under 5% of the context window, because a summary would not free useful space. The user SHALL see that compaction is in progress and the size before and after.
 
 #### Scenario: Long session continues
 - **WHEN** a session goes over the limit and pruning does not free enough
@@ -43,8 +51,12 @@ When the conversation is still over the limit after pruning, `nar` SHALL ask the
 - **WHEN** the conversation is over the limit but its older part is under 5% of the window
 - **THEN** no summary is requested and the request goes on
 
+#### Scenario: A huge request alone
+- **WHEN** a single request is over the limit by itself
+- **THEN** no summary is requested and its text is sent unchanged
+
 ### Requirement: Summary failure
-A summary that cannot be made (a provider error or an empty answer) SHALL leave the history as it was. During a request, the user SHALL see a warning and the request SHALL continue.
+A summary that cannot be made (a provider error, an empty answer, or a result that is not smaller than the conversation) SHALL leave the history as it was. During a request, the user SHALL see a warning and the request SHALL continue.
 
 #### Scenario: Provider error during compaction
 - **WHEN** the provider fails while summarizing during a request
@@ -53,6 +65,10 @@ A summary that cannot be made (a provider error or an empty answer) SHALL leave 
 #### Scenario: Empty summary
 - **WHEN** the model returns an empty summary
 - **THEN** the history is unchanged and the user sees a warning
+
+#### Scenario: Summary larger than the conversation
+- **WHEN** the result of a compaction would not be smaller than the conversation
+- **THEN** the result is discarded, the history is unchanged and the user sees a warning
 
 ### Requirement: Cancelled requests undo context changes
 A request that is cancelled or fails SHALL leave the conversation as it was before the request, even when the request pruned or compacted it.
