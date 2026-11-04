@@ -36,3 +36,5 @@
   _Evidence (OpenRouter, temporary `NAR_HOME` and project, a real terminal through a pty, 2026-11-04): with the example in `.nar/tools/`, `nar` listed the file and asked; after `y` it printed `custom tool loaded: word_count`, and the model called `word_count(path="notas.txt")` and answered 5 words, which is correct. The next run did not ask. After changing the file it asked again; after `n` it printed `project tools skipped`, and a marker the file writes when it runs was not created. With no terminal and `approval = "yolo"` in the project's configuration, the marker was not created, a warning named `--trust-project-tools`, and the exit code was 0. No `__pycache__` was left in the folder. `trusted_tools.json` has mode 0600._
 
   _Not run with Ollama, at Nathalia's request (2026-11-03). Still open: Anthropic._
+
+> **Closed on 2026-11-04 by decision of Nathalia.** The Anthropic check was not run, because the team has no `ANTHROPIC_API_KEY`, and the Ollama check was not run, at her request. Unchecked tasks above were left unchecked on purpose. Ruben was told in Linear RRG-61.
