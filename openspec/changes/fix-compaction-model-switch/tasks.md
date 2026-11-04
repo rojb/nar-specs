@@ -19,3 +19,5 @@
   _Evidence (OpenRouter, a real terminal through a pty, 2026-11-04): after a request, `/model openrouter/no-existe/modelo-falso` printed `model: openrouter · no-existe/modelo-falso`, and `/compact` printed `error: openrouter rejected the request (400): no-existe/modelo-falso is not a valid model ID`. The summary went to the new model, and the session continued to `exit` with code 0. `pytest`: 1242 passed; the only failure is the known Linux one._
 
   _Not run with Ollama, at Nathalia's request (2026-11-03). Still open: Anthropic._
+
+> **Closed on 2026-11-04 by decision of Nathalia.** The Anthropic check was not run, because the team has no `ANTHROPIC_API_KEY`, and the Ollama check was not run, at her request. Unchecked tasks above were left unchecked on purpose. Ruben was told in Linear RRG-61.
