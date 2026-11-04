@@ -56,3 +56,5 @@
   - `--provider anthropic --show-config` → `provider = anthropic  (command line)` ✔
   - Missing `OPENROUTER_API_KEY` / `ANTHROPIC_API_KEY` → one-line error naming the variable, exit 1 ✔; `provider = "openai"` in the file → error listing `anthropic, openrouter, ollama`, exit 1 ✔; `--provider openai` → Click usage error listing the three, exit 2 ✔
   - `model = "no-such-model"` on Ollama → `model 'no-such-model' was not found by ollama`, exit 1 ✔; `OLLAMA_HOST=127.0.0.1:59999` → 3 retry notices (1.2 s, 2.1 s, 4.5 s), then `cannot reach Ollama at http://127.0.0.1:59999; is it running? (start it with 'ollama serve')`, exit 1 ✔
+
+> **Closed on 2026-11-04 by decision of Nathalia.** The Anthropic check was not run, because the team has no `ANTHROPIC_API_KEY`. Unchecked tasks above were left unchecked on purpose. Ruben was told in Linear RRG-61.
