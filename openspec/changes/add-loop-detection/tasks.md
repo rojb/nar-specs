@@ -7,8 +7,8 @@
 
 ## [specs]
 
-- [ ] 0.1 Link this change to Linear RRG-71 (move the issue from Backlog to In Progress and add the `nar-specs` change path as a link on the issue); verify the link opens `openspec/changes/add-loop-detection/` on GitHub once merged
-- [ ] 0.2 Open a PR in `nar-specs` from Linear's RRG-71 branch with proposal, specs, design and tasks; verify `openspec validate add-loop-detection --strict` passes
+- [x] 0.1 Link this change to Linear RRG-71 (move the issue from Backlog to In Progress and add the `nar-specs` change path as a link on the issue); verify the link opens `openspec/changes/add-loop-detection/` on GitHub once merged _Evidence: 2026-11-04 RRG-71 moved Backlog -> In Progress, with two attachments: the PR https://github.com/rojb/nar-specs/pull/8 and the change folder on the branch._
+- [x] 0.2 Open a PR in `nar-specs` from Linear's RRG-71 branch with proposal, specs, design and tasks; verify `openspec validate add-loop-detection --strict` passes _Evidence: PR rojb/nar-specs#8 from `rubenjustiniano96/rrg-71-add-loop-detection-detectar-loops-y-feedback-de-errores`; `openspec validate add-loop-detection --strict` -> "Change 'add-loop-detection' is valid", 4/4 artifacts._
 
 ## [nar]
 
