@@ -37,3 +37,5 @@
   _Evidence (OpenRouter, temporary `NAR_HOME`, 2026-11-03): gave the code name GATO-42 and read `pyproject.toml`, then `exit`. `nar --resume` showed the earlier request, answer and `read_file` call, and answered "GATO-42" and `pyproject.toml` without reading again, in the same session file (mode 0600). A second session, then `/resume <id>` went back to the first and answered GATO-42; `/sessions` listed both with `*` on the current one. `nar --resume <beginning of id> "..."` answered in single mode with exit code 0. SIGKILL during a request left 6 messages with every tool call answered and no temporary file, and resuming answered the code name LORO-7. `nar --resume` in a folder without sessions, `nar --resume "a prompt"` and `nar --resume ../../x` each gave a one-line error and exit code 1._
 
   _Not run with Ollama, at Nathalia's request (2026-11-03). Still open: Anthropic._
+
+> **Closed on 2026-11-04 by decision of Nathalia.** The Anthropic check was not run, because the team has no `ANTHROPIC_API_KEY`, and the Ollama check was not run, at her request. Unchecked tasks above were left unchecked on purpose. Ruben was told in Linear RRG-61.
