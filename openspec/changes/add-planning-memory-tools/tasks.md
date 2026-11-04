@@ -50,3 +50,5 @@
   - `scripts/run_tool.py` memory save/list and todos as in the README ✔
   - Ollama (`qwen3.5:4b`, CPU), session 1 "recuerda que mi lenguaje favorito es Rust": one timeout retry, then `memory(action="save", key="favorite_language", value="Mi lenguaje favorito es Rust")` ✓ saved, 238 s, exit 0 (no closing text) ✔; session 2 (new process) "¿cuál es mi lenguaje favorito?": called `memory(action="list")` although the entry was already in the system prompt, then answered "Tu lenguaje favorito es **Rust**."; 78 s, exit 0 ✔
   - Anthropic: **pending** (no `ANTHROPIC_API_KEY`)
+
+> **Closed on 2026-11-04 by decision of Nathalia.** The Anthropic check was not run, because the team has no `ANTHROPIC_API_KEY`. Unchecked tasks above were left unchecked on purpose. Ruben was told in Linear RRG-61.
