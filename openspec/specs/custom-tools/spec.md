@@ -1,7 +1,7 @@
 # custom-tools Specification
 
 ## Purpose
-TBD - created by archiving change add-custom-tools. Update Purpose after archive.
+Defines how `nar` loads tools the user adds as Python files: where it looks, why the files of a project run only after the user allows them, how failures and name collisions are handled, and the example and guide.
 
 ## Requirements
 

@@ -1,7 +1,7 @@
 # sessions Specification
 
 ## Purpose
-TBD - created by archiving change add-sessions. Update Purpose after archive.
+Defines how `nar` saves each conversation and continues it later: what a session file holds, when it is saved, `nar --resume`, `/sessions` and `/resume`, how the earlier history is shown, and what happens when saving fails.
 
 ## Requirements
 

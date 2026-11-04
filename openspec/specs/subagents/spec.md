@@ -1,7 +1,7 @@
 # subagents Specification
 
 ## Purpose
-TBD - created by archiving change add-subagents. Update Purpose after archive.
+Defines the `task` tool: subagents with their own conversation that return only a final answer, the `explorer` and `general` types, their limits, how approvals and hooks apply to them, and how their activity is shown. The research behind it is in `docs/SUBAGENTES.md`.
 
 ## Requirements
 

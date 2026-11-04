@@ -1,7 +1,7 @@
 # context-compaction Specification
 
 ## Purpose
-TBD - created by archiving change add-context-compaction. Update Purpose after archive.
+Defines how `nar` keeps a long conversation inside the model's context window: the limit, pruning old tool results first, compacting with a summary if that is not enough, `/compact`, the usage indicator, and what happens on failure or cancellation.
 
 ## Requirements
 

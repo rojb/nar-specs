@@ -1,7 +1,7 @@
 # checkpoints Specification
 
 ## Purpose
-TBD - created by archiving change add-checkpoints. Update Purpose after archive.
+Defines checkpoints: points inside a session that the conversation can return to with `/checkpoint`, `/checkpoints` and `/restore`. A session is the whole conversation; a checkpoint is one point in it. Restoring discards later messages and does not restore files.
 
 ## Requirements
 
