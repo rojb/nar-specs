@@ -47,3 +47,5 @@
   - `grep` `def load_config` with `glob` `*.py` → `src/nar/config/loader.py:43:def load_config(cwd: Path, overrides: ...` plus the test fixtures that mention it ✔
   - OpenRouter (`openrouter/auto`): `nar --provider openrouter "¿dónde se define la función load_config?"` → one `grep(pattern="def load_config")` call (✓ 6 matches in 4 files), answer `src/nar/config/loader.py:43`, telling the definition apart from the README and test references; 10.6 s, exit 0 ✔
   - Ollama (`qwen3.5:4b`, CPU): running; Anthropic: **pending** (no `ANTHROPIC_API_KEY`)
+
+> **Closed on 2026-11-04 by decision of Nathalia.** The Anthropic check was not run, because the team has no `ANTHROPIC_API_KEY`. Unchecked tasks above were left unchecked on purpose. Ruben was told in Linear RRG-61.
