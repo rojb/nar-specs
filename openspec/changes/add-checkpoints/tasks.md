@@ -34,3 +34,5 @@
   _Evidence (OpenRouter, temporary `NAR_HOME`, 2026-11-04): gave the code name GATO-42, ran `/checkpoint base` (`checkpoint 1 saved: base (2 messages)`), gave a second code name LORO-7, and `/checkpoints` listed the checkpoint. `/restore base` said the conversation had 2 messages and files were not restored. Asked for the second code name, the model answered "NO LO SE" and still gave GATO-42. The session file no longer contained LORO-7. After `exit` and `nar --resume`, `/checkpoints` listed it, `/restore base` worked, and `/sessions` showed one session with no invalid-file warning._
 
   _Not run with Ollama, at Nathalia's request (2026-11-03). Still open: Anthropic._
+
+> **Closed on 2026-11-04 by decision of Nathalia.** The Anthropic check was not run, because the team has no `ANTHROPIC_API_KEY`, and the Ollama check was not run, at her request. Unchecked tasks above were left unchecked on purpose. Ruben was told in Linear RRG-61.
