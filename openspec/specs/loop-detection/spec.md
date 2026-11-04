@@ -1,7 +1,7 @@
 # loop-detection Specification
 
 ## Purpose
-TBD - created by archiving change add-loop-detection. Update Purpose after archive.
+Defines how `nar` notices that the agent is repeating itself — the same tool call in a row, or two calls alternating without progress — how it asks the model to change strategy, when it stops the request instead, what a failed tool tells the model so it can correct the next attempt, and what the user sees.
 
 ## Requirements
 
