@@ -48,7 +48,7 @@
 
 ## 9. Manual verification (RRG-71 "done when")
 
-- [ ] 9.1 Walk through RRG-71's "done when" ("un escenario forzado de repetición se corta con aviso en vez de consumir turnos infinitos": a forced repetition scenario is cut with a warning instead of consuming endless turns) at the `nar/` repo root with `NAR_HOME` pointing at a temp folder, and record what was observed for each step:
+- [x] 9.1 Walk through RRG-71's "done when" ("un escenario forzado de repetición se corta con aviso en vez de consumir turnos infinitos": a forced repetition scenario is cut with a warning instead of consuming endless turns) at the `nar/` repo root with `NAR_HOME` pointing at a temp folder, and record what was observed for each step:
   - Trigger: with a small model (for example `deepseek-flash` or a local Ollama model) and a temp project, ask `nar` to read a file that does not exist and to "keep trying until it works"; if the model gives up instead of repeating, force the repetition with a prompt that requires the same call ("run `pytest -q` in this folder again, the same command, until the output changes") and record which of the two triggers worked
   - Warning: record the `warning:` line on standard error, the tool name and the count, and that the request continued after it
   - Stop: keep the model repeating and record the `stopped:` line, that the request ended without reaching `max_turns`, and that the terminal came back in interactive mode
@@ -57,4 +57,4 @@
   - Approval rejection is not enveloped: reject a tool call with `n` and a reason, and record that the model received the rejection text as it is, without the envelope
   - History: record that the conversation after a stop contains every tool call with its result, and that `nar --resume` on that session works
   - Recording: date, OS and shell, provider and model, `nar` commit, which trigger worked, and the exact warning and stop lines
-  - _Evidence: <date, environment, observations>_
+  - _Evidence: the owner (Ruben) ran the checklist on 2026-11-04 against the merged `main` at `7268b23` and reported that it works: the forced repetition is cut with the warning and the request does not run to `max_turns`. Recorded as reported. NOT recorded, so this evidence is thinner than the other manual checks in this store: the exact `warning:` and `stopped:` lines, the trigger that was used, the provider and model, the exit code in single mode, and the envelope text read from the session file. If any of those is needed later, re-run 9.1 and replace this line._
