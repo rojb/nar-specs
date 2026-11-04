@@ -125,3 +125,14 @@ The configuration SHALL support `context_window`, the size of the model's contex
 #### Scenario: Invalid threshold
 - **WHEN** a file sets `context_threshold = 0`
 - **THEN** `nar` stops with a one-line error naming the setting and the file, and exit code 1
+
+### Requirement: Subagent turn limit
+The configuration SHALL support `subagent_max_turns`, the model calls a subagent may make for one task, a whole number of at least 1, default 15.
+
+#### Scenario: Default
+- **WHEN** no file sets `subagent_max_turns`
+- **THEN** the effective value is 15, and `--show-config` shows it
+
+#### Scenario: Invalid value
+- **WHEN** a file sets `subagent_max_turns = 0`
+- **THEN** `nar` stops with a one-line error naming the setting and the file, and exit code 1
