@@ -20,7 +20,7 @@ The `nar` command SHALL print usage information describing its modes and options
 - **THEN** the output describes how to start interactive mode and single mode, lists the available options, and the command exits with code 0
 
 ### Requirement: Interactive mode
-Running `nar` with no prompt argument SHALL start an interactive session that repeatedly reads user input until the user leaves it.
+Running `nar` with no prompt argument SHALL start an interactive session that repeatedly reads user input until the user leaves it. Each non-empty line SHALL be handled as a request to the agent, and the conversation SHALL be kept for the whole session.
 
 #### Scenario: Start and exit interactive mode
 - **WHEN** the user runs `nar` with no arguments and then types `exit`
@@ -34,8 +34,12 @@ Running `nar` with no prompt argument SHALL start an interactive session that re
 - **WHEN** the user submits an empty or whitespace-only line in interactive mode
 - **THEN** nothing is processed and the prompt is shown again
 
+#### Scenario: Ctrl+C during a request
+- **WHEN** the user presses Ctrl+C while the agent is working on a request
+- **THEN** that request is cancelled, the session continues, and the prompt is shown again
+
 ### Requirement: Single mode
-Running `nar` with a prompt argument SHALL process that one prompt and exit without entering interactive mode. Until the agent loop exists, processing means sending the prompt to the selected provider and model and printing the answer to standard output as it is generated.
+Running `nar` with a prompt argument SHALL process that one prompt and exit without entering interactive mode. Processing means running the agent on the prompt with the selected provider and model and printing the answer to standard output as it is generated.
 
 #### Scenario: Single prompt
 - **WHEN** the user runs `nar "explain this repository"`
@@ -52,6 +56,18 @@ Running `nar` with a prompt argument SHALL process that one prompt and exit with
 #### Scenario: Provider failure in single mode
 - **WHEN** the user runs `nar "hello"` and the provider cannot be used (for example, its API key is missing)
 - **THEN** a one-line error is printed to standard error, nothing is printed to standard output, and the command exits with code 1
+
+#### Scenario: Single mode uses tools
+- **WHEN** the user runs `nar "read pyproject.toml and tell me the version"` in a project with a `pyproject.toml`
+- **THEN** the agent reads the file with `read_file`, prints an answer that states the version, and the command exits with code 0
+
+#### Scenario: Turn limit in single mode
+- **WHEN** a single-mode request stops at the turn limit
+- **THEN** the message about the limit is printed to standard error and the command exits with code 1
+
+#### Scenario: Ctrl+C in single mode
+- **WHEN** the user presses Ctrl+C while a single-mode request is running
+- **THEN** the request is cancelled without a traceback and the command exits with code 130
 
 ### Requirement: User-facing error reporting
 Expected failures (such as invalid configuration) SHALL be reported as a short, human-readable message on standard error and a non-zero exit code, without a Python traceback. Unexpected internal failures SHALL also exit with a non-zero code.
