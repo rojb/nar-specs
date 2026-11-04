@@ -38,7 +38,7 @@ No new configuration keys, on purpose (see Context).
 
 Classes found: `inspect.getmembers(module, inspect.isclass)`, subclasses of `Tool`, `__module__` equal to this module's name (so imports do not count), not abstract. Each is created without arguments.
 
-Everything except `KeyboardInterrupt` is caught around the import and creation, including `SystemExit`, which is a `BaseException`. **Why not only `Exception`:** a stray `sys.exit` in a tool file must not close `nar`. `ToolError` from `register` becomes the warning for a repeated name, a bad name or a bad schema.
+Everything except `KeyboardInterrupt` is caught around the import and creation, including `SystemExit`, which is a `BaseException`. **Why not only `Exception`:** a stray `sys.exit` in a tool file must not close `nar`. `ToolError` from `register` becomes the warning for a repeated name, a bad name or a bad schema. A missing `name`, `description` or `parameters`, or a `description` that is not text, is rejected at load time: the registry would accept some of these, and `definitions()` would then fail on every model call.
 
 ### 3. Trust
 `~/.nar/trusted_tools.json`: `{"version": 1, "projects": {"<resolved folder>": "<sha256>"}}`. The fingerprint is a SHA-256 over each file's name and bytes, in name order, for the `.py` files that would be loaded. Written atomically with mode 0600, with `write_private`.
