@@ -37,8 +37,8 @@ When both files define the same setting, the project-level value SHALL win. Sett
 
 ### Requirement: Initial settings
 The configuration SHALL support at least these settings, each with a documented default:
-- `provider`: which LLM provider to use.
-- `model`: which model of that provider to use.
+- `provider`: which LLM provider to use; one of `anthropic`, `openrouter`, `ollama`; default `openrouter`.
+- `model`: which model of that provider to use; when not set, the selected provider's documented default model is used.
 - `approval`: how much autonomy the agent has; one of `ask`, `auto-edit`, `yolo`; default `ask`.
 - `mcp_servers`: a table of named external MCP server definitions; default empty.
 
@@ -49,6 +49,14 @@ The configuration SHALL support at least these settings, each with a documented 
 #### Scenario: Effective configuration is inspectable
 - **WHEN** the user runs `nar --show-config`
 - **THEN** the effective merged configuration is printed, indicating which file (user, project or default) each value came from
+
+#### Scenario: Model follows the provider
+- **WHEN** a configuration file sets `provider = "ollama"` and no file sets `model`
+- **THEN** the effective `model` is the documented default model for `ollama`
+
+#### Scenario: Unsupported provider
+- **WHEN** a configuration file sets `provider = "openai"`
+- **THEN** `nar` exits with code 1 and the error names the `provider` setting and lists `anthropic, openrouter, ollama`
 
 ### Requirement: Configuration validation
 `nar` SHALL validate the merged configuration at startup and refuse to start when it is invalid, reporting the file and the offending setting.
@@ -80,3 +88,51 @@ The configuration SHALL support at least these settings, each with a documented 
 #### Scenario: An out-of-range value
 - **WHEN** the file sets `hook_timeout = 0` or `hook_timeout = 601`
 - **THEN** `nar` refuses to start and the error names `hook_timeout` and the file
+
+### Requirement: Command-line overrides
+The `--provider` and `--model` command-line options SHALL override the `provider` and `model` values from every configuration file for that run, and SHALL be validated the same way. `nar --show-config` SHALL show them with the command line as their source.
+
+#### Scenario: Flag beats project file
+- **WHEN** `.nar/config.toml` sets `provider = "openrouter"` and the user runs `nar --provider ollama --show-config`
+- **THEN** the effective provider is `ollama` and its source is shown as the command line
+
+#### Scenario: Provider flag alone
+- **WHEN** no configuration file sets `model` and the user runs `nar --provider anthropic --show-config`
+- **THEN** the effective model is the documented default model for `anthropic`
+
+### Requirement: Turn limit setting
+The configuration SHALL support a `max_turns` setting: the maximum number of model calls the agent makes for one request. It SHALL be a whole number of at least 1, with default 20.
+
+#### Scenario: Default turn limit
+- **WHEN** no configuration file sets `max_turns`
+- **THEN** the effective `max_turns` is 20 and `nar --show-config` shows it with source `default`
+
+#### Scenario: Invalid turn limit
+- **WHEN** a configuration file sets `max_turns = 0`
+- **THEN** `nar` exits with code 1 and the error names the `max_turns` setting and the file
+
+### Requirement: Context limit settings
+The configuration SHALL support `context_window`, the size of the model's context in tokens, a whole number of at least 1000, whose default depends on the provider (`anthropic` 200000, `openrouter` 128000, `deepseek` 128000, `ollama` 4096), and `context_threshold`, the percentage of the window at which `nar` starts reducing the conversation, a whole number from 1 to 100, default 80.
+
+#### Scenario: Default depends on the provider
+- **WHEN** no file sets `context_window` and the provider is `ollama`
+- **THEN** the effective `context_window` is 4096 and `--show-config` shows it
+
+#### Scenario: Value from a file wins
+- **WHEN** `.nar/config.toml` sets `context_window = 32000`
+- **THEN** the effective value is 32000 with any provider
+
+#### Scenario: Invalid threshold
+- **WHEN** a file sets `context_threshold = 0`
+- **THEN** `nar` stops with a one-line error naming the setting and the file, and exit code 1
+
+### Requirement: Subagent turn limit
+The configuration SHALL support `subagent_max_turns`, the model calls a subagent may make for one task, a whole number of at least 1, default 15.
+
+#### Scenario: Default
+- **WHEN** no file sets `subagent_max_turns`
+- **THEN** the effective value is 15, and `--show-config` shows it
+
+#### Scenario: Invalid value
+- **WHEN** a file sets `subagent_max_turns = 0`
+- **THEN** `nar` stops with a one-line error naming the setting and the file, and exit code 1
