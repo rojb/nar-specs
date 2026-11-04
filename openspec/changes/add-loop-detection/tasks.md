@@ -43,7 +43,7 @@
 
 ## 8. Delivery
 
-- [ ] 8.1 Push the branch and open a PR in `nar` referencing RRG-71 with a Conventional Commit message (for example `feat(agent): detect repeated tool calls and stop the request (RRG-71)`), and ask for `size:exception` if the tests push it over the guide; verify the PR shows only this change
+- [x] 8.1 Push the branch and open a PR in `nar` referencing RRG-71 with a Conventional Commit message (for example `feat(agent): detect repeated tool calls and stop the request (RRG-71)`), and ask for `size:exception` if the tests push it over the guide; verify the PR shows only this change _Evidence: PR rojb/nar#27 from `rubenjustiniano96/rrg-71-add-loop-detection-detectar-loops-y-feedback-de-errores`, four commits (`03e1f0d` tools, `a6a5f50` agent, `77183fb` cli, `5af36e4` docs), 750 changed lines mostly tests, `size:exception` asked in the body; the PR shows only this change (the branch was cut from `main` at `b60b402` and carries nothing else). Linked on Linear RRG-71._
 - [ ] 8.2 Merge the PR and confirm `main` contains the branch with `pytest` and `ruff check .` clean
 
 ## 9. Manual verification (RRG-71 "done when")
