@@ -97,3 +97,14 @@ In interactive mode, after each request and after `/compact`, `nar` SHALL show o
 #### Scenario: Indicator after a request
 - **WHEN** a request finishes in interactive mode
 - **THEN** a line such as `context: 12,300 / 128,000 tokens (10%)` is shown on standard error and nothing is added to standard output
+
+### Requirement: Compaction uses the current provider
+The summary of a compaction SHALL be requested from the provider and model selected at that moment, including after `/model`.
+
+#### Scenario: Manual compaction after changing the model
+- **WHEN** the user runs `/model` to change the provider and then `/compact`
+- **THEN** the summary is requested from the new provider, and the previous one receives nothing
+
+#### Scenario: Automatic compaction after changing the model
+- **WHEN** the conversation goes over the context limit after `/model`
+- **THEN** the summary is requested from the new provider
