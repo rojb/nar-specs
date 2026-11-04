@@ -47,3 +47,5 @@
   - OpenRouter (`openrouter/auto`): `nar --provider openrouter "busca la documentación de la librería httpx y resume su página principal"` → stderr `web_search` ×2 (✓ 5 results each), `web_fetch(url="https://www.python-httpx.org/")` (✓ fetched 4193 chars); the answer summarized what HTTPX is, installation, main features and linked the QuickStart/Async/HTTP2/API pages; 15.3 s, exit 0 ✔
   - Ollama (`qwen3.5:4b`, CPU): one timeout retry, then `web_search(query="httpx library official documentation main page")` (✓ 5 results), `web_fetch(url="https://www.python-httpx.org/")` (✓ fetched 4193 chars); answer in Spanish with what HTTPX is, installation, features and dependencies; 465 s, exit 0 ✔
   - Anthropic: **pending** (no `ANTHROPIC_API_KEY`)
+
+> **Closed on 2026-11-04 by decision of Nathalia.** The Anthropic check was not run, because the team has no `ANTHROPIC_API_KEY`. Unchecked tasks above were left unchecked on purpose. Ruben was told in Linear RRG-61.
