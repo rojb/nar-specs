@@ -81,12 +81,62 @@ Expected failures (such as invalid configuration) SHALL be reported as a short, 
 - **THEN** the full traceback is printed in addition to the error message
 
 ### Requirement: Provider and model options
-The `nar` command SHALL accept `--provider <name>` and `--model <name>` options in both modes, choosing the provider and model for that run; `--help` SHALL list them together with the allowed provider names.
+The `nar` command SHALL accept `--provider <name>` and `--model <name>` options in both modes, choosing the provider and model for that run; `--help` SHALL list them together with the allowed provider names (`anthropic`, `openrouter`, `ollama`, `deepseek`).
 
 #### Scenario: Choose provider and model from the command line
 - **WHEN** the user runs `nar --provider ollama --model qwen2.5-coder "hello"`
 - **THEN** the prompt is answered by the `qwen2.5-coder` model of the local Ollama server, whatever the configuration files say
 
+#### Scenario: Choose DeepSeek from the command line
+- **WHEN** the user runs `nar --provider deepseek "hello"` with `DEEPSEEK_API_KEY` set
+- **THEN** the prompt is answered by the documented default model of DeepSeek, whatever the configuration files say
+
+#### Scenario: Help lists DeepSeek
+- **WHEN** the user runs `nar --help`
+- **THEN** the `--provider` option lists `deepseek` among the allowed names
+
 #### Scenario: Invalid provider option
 - **WHEN** the user runs `nar --provider openai "hello"`
-- **THEN** `nar` exits with a non-zero code and the error lists `anthropic`, `openrouter` and `ollama`
+- **THEN** `nar` exits with a non-zero code and the error lists `anthropic`, `openrouter`, `ollama` and `deepseek`
+
+### Requirement: Approval option
+The `nar` command SHALL accept an `--approval <level>` option in both modes, choosing the autonomy level (`ask`, `auto-edit` or `yolo`) for that run; `--help` SHALL list it together with the allowed levels. Questions asked because of the chosen level SHALL be shown and answered in the terminal in both modes.
+
+#### Scenario: Choose the level from the command line
+- **WHEN** the user runs `nar --approval auto-edit "add a docstring to src/app.py"` and the model calls `edit_file` on a file in the working directory
+- **THEN** the file is edited without a question, whatever the configuration files say
+
+#### Scenario: Invalid level
+- **WHEN** the user runs `nar --approval always "hello"`
+- **THEN** `nar` exits with a non-zero code and the error lists `ask`, `auto-edit` and `yolo`
+
+#### Scenario: Help lists the option
+- **WHEN** the user runs `nar --help`
+- **THEN** the output lists `--approval` with the three allowed levels
+
+#### Scenario: Question in single mode
+- **WHEN** the user runs `nar "create hello.py"` in a terminal at the `ask` level and the model calls `write_file`
+- **THEN** the user is asked in the terminal, and after the answer the request continues and the command exits with code 0
+
+#### Scenario: Question in interactive mode
+- **WHEN** the user is in interactive mode at the `ask` level and the model calls `shell`
+- **THEN** the user is asked in the terminal, and after the answer the request continues and the prompt returns when it ends
+
+### Requirement: Slash commands in interactive mode
+In interactive mode, a line that starts with `/` followed by a command name (a letter, then letters, digits or `-`) and then either nothing or whitespace SHALL be handled as a command by `nar` and SHALL NOT be sent to the model or added to the conversation. Text after the name is the command's argument. A line that starts with `/` but is not of that form (for example a file path such as `/etc/hosts`) SHALL be treated as an ordinary request. A command name `nar` does not know SHALL print an error that lists the available commands and the session SHALL continue. Commands SHALL NOT be available in single mode, where the prompt is always a request. The available commands in this change are `/mcp`; further commands are added by later changes.
+
+#### Scenario: Known command
+- **WHEN** the user types `/mcp` at the `nar>` prompt
+- **THEN** `nar` prints the MCP servers and returns to the prompt without calling the model
+
+#### Scenario: Unknown command
+- **WHEN** the user types `/foo` at the prompt
+- **THEN** `nar` prints an error that `/foo` is not a command and lists the available commands, does not call the model, and shows the prompt again
+
+#### Scenario: Path is not a command
+- **WHEN** the user types `/etc/hosts what is this file?`
+- **THEN** the line is sent to the model as a request
+
+#### Scenario: Single mode
+- **WHEN** the user runs `nar "/mcp"`
+- **THEN** the text `/mcp` is sent to the model as the prompt
