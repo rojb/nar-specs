@@ -2,19 +2,19 @@
 
 > Review workload: about 250 lines of code and docs plus 350 lines of tests, near the ~400-line
 > guide (a planning heuristic, not a cap; tests are never dropped to fit). No stacked PRs are needed:
-> it fits in one PR. The branch name below is the one Linear suggests for RRG-71; copy it from the
-> issue when linking it (0.1) and rename the branch if it differs.
+> it fits in one PR. The branch name in 1.1 and the "done when" in `proposal.md` are the ones the
+> Linear issue shows, read on 2026-11-04.
 
 ## [specs]
 
-- [ ] 0.1 Link this change to Linear RRG-71 (move the issue to In Progress and add the `nar-specs` change path as a link), confirm the issue's "done when" wording against the one quoted in `proposal.md` and fix the proposal if it differs, and copy the branch name Linear shows into 1.1; verify the link opens `openspec/changes/add-loop-detection/` on GitHub once merged
+- [ ] 0.1 Link this change to Linear RRG-71 (move the issue from Backlog to In Progress and add the `nar-specs` change path as a link on the issue); verify the link opens `openspec/changes/add-loop-detection/` on GitHub once merged
 - [ ] 0.2 Open a PR in `nar-specs` from Linear's RRG-71 branch with proposal, specs, design and tasks; verify `openspec validate add-loop-detection --strict` passes
 
 ## [nar]
 
 ## 1. Branch
 
-- [ ] 1.1 In `nar/`, update `main` and create `rubenjustiniano96/rrg-71-add-loop-detection-deteccion-de-bucles-y-estrategia` (replace it with Linear's branch name if it differs); verify `git status` shows the new branch and a clean tree, that `pip install -e ".[dev]"` works, and that `pytest -q` and `ruff check .` pass before any change _Evidence: baseline on `main` at `b60b402`, after the pull of 2026-11-04: `pytest -q` 1021 passed, 1 skipped (`test_keyboard_interrupt_kills_the_tree_and_propagates`, already accepted on Linux); `ruff check .` All checks passed; `ruff format --check .` 126 files already formatted._
+- [ ] 1.1 In `nar/`, update `main` and create `rubenjustiniano96/rrg-71-add-loop-detection-detectar-loops-y-feedback-de-errores` (the `gitBranchName` of RRG-71); verify `git status` shows the new branch and a clean tree, that `pip install -e ".[dev]"` works, and that `pytest -q` and `ruff check .` pass before any change _Evidence: baseline on `main` at `b60b402`, after the pull of 2026-11-04: `pytest -q` 1021 passed, 1 skipped (`test_keyboard_interrupt_kills_the_tree_and_propagates`, already accepted on Linux); `ruff check .` All checks passed; `ruff format --check .` 126 files already formatted._
 
 ## 2. Failure kinds
 
@@ -48,7 +48,7 @@
 
 ## 9. Manual verification (RRG-71 "done when")
 
-- [ ] 9.1 Walk through RRG-71's "done when" (an agent that keeps repeating the same tool call no longer spins until the turn limit: it is told to change strategy and, if it insists, the request stops with a clear message and the session goes on) at the `nar/` repo root with `NAR_HOME` pointing at a temp folder, and record what was observed for each step:
+- [ ] 9.1 Walk through RRG-71's "done when" ("un escenario forzado de repetición se corta con aviso en vez de consumir turnos infinitos": a forced repetition scenario is cut with a warning instead of consuming endless turns) at the `nar/` repo root with `NAR_HOME` pointing at a temp folder, and record what was observed for each step:
   - Trigger: with a small model (for example `deepseek-flash` or a local Ollama model) and a temp project, ask `nar` to read a file that does not exist and to "keep trying until it works"; if the model gives up instead of repeating, force the repetition with a prompt that requires the same call ("run `pytest -q` in this folder again, the same command, until the output changes") and record which of the two triggers worked
   - Warning: record the `warning:` line on standard error, the tool name and the count, and that the request continued after it
   - Stop: keep the model repeating and record the `stopped:` line, that the request ended without reaching `max_turns`, and that the terminal came back in interactive mode

@@ -43,10 +43,10 @@ Out of scope: a setting to turn detection off or tune it, per-model thresholds, 
 the model's prose, detecting loops across requests or sessions, undoing the side effects of the tool
 calls that ran, and asking a second model to judge whether the agent is looping.
 
-**"Done when" (RRG-71):** an agent that keeps repeating the same tool call no longer spins until the
-turn limit: it is told to change strategy and, if it insists, the request stops with a clear message
-and the session goes on. Wording taken from `docs/ROADMAP.md`; confirm it against the Linear issue
-when linking it (task 0.1).
+**"Done when" (RRG-71):** *"un escenario forzado de repetición se corta con aviso en vez de consumir
+turnos infinitos"* — quoted from the Linear issue, which is written in Spanish. In English: a forced
+repetition scenario is cut with a warning instead of consuming endless turns. Confirmed against the
+issue on 2026-11-04, together with the branch name used in 1.1.
 
 ## Capabilities
 
