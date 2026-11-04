@@ -44,7 +44,7 @@
 ## 8. Delivery
 
 - [x] 8.1 Push the branch and open a PR in `nar` referencing RRG-71 with a Conventional Commit message (for example `feat(agent): detect repeated tool calls and stop the request (RRG-71)`), and ask for `size:exception` if the tests push it over the guide; verify the PR shows only this change _Evidence: PR rojb/nar#27 from `rubenjustiniano96/rrg-71-add-loop-detection-detectar-loops-y-feedback-de-errores`, four commits (`03e1f0d` tools, `a6a5f50` agent, `77183fb` cli, `5af36e4` docs), 750 changed lines mostly tests, `size:exception` asked in the body; the PR shows only this change (the branch was cut from `main` at `b60b402` and carries nothing else). Linked on Linear RRG-71._
-- [ ] 8.2 Merge the PR and confirm `main` contains the branch with `pytest` and `ruff check .` clean
+- [x] 8.2 Merge the PR and confirm `main` contains the branch with `pytest` and `ruff check .` clean _Evidence: merged 2026-11-04 as `7268b23` ("Merge pull request #27 from rojb/rubenjustiniano96/rrg-71-..."), remote branch deleted; the `nar-specs` PR rojb/nar-specs#8 merged as `49da3dd`. On the merged `main` at `7268b23`: `pytest -q` 1060 passed, 1 skipped in 1m 45s; `ruff check .` All checks passed; `ruff format --check .` 128 files already formatted._
 
 ## 9. Manual verification (RRG-71 "done when")
 
