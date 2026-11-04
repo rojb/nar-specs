@@ -48,3 +48,5 @@
   - Ctrl+C while a long answer was streaming (real pseudo-terminal) → `cancelled`, prompt returned, the next request ("di solo: hola") was answered, `exit` → 0 ✔; the "waiting for openrouter/auto..." spinner disappeared when output started ✔
   - `max_turns = 1` → `stopped after 1 turns without a final answer; raise max_turns in .nar/config.toml to allow more`, exit 1 ✔
   - Ollama: only reasoning models (`qwen3.5`) installed, CPU only; result recorded below when the run finishes. Anthropic: **pending** (no `ANTHROPIC_API_KEY`).
+
+> **Closed on 2026-11-04 by decision of Nathalia.** The Anthropic check was not run, because the team has no `ANTHROPIC_API_KEY`. Unchecked tasks above were left unchecked on purpose. Ruben was told in Linear RRG-61.
