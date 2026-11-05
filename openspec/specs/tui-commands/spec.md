@@ -43,6 +43,14 @@ Every session SHALL have `/help`, `/clear`, `/exit`, `/model`, `/approval`, `/co
 - **WHEN** the user types `/help extra`
 - **THEN** the command runs and the argument is ignored, except where a command documents one
 
+#### Scenario: A command registered by another change answers on standard error
+- **WHEN** the user types `/mcp`, `/sessions` or `/checkpoints`
+- **THEN** the answer appears on standard error and standard output holds only the banner and the prompt
+
+#### Scenario: A redirected interactive run keeps only the answers
+- **WHEN** `nar` reads commands from standard input and standard output is redirected to a file
+- **THEN** the file holds only the banner, the prompt and the model's answers, never a command's answer
+
 ### Requirement: /model changes provider and model in place
 
 `/model` with no argument SHALL show the provider and model in use, with the source they came from. `/model <provider>` SHALL switch to that provider's default model, `/model <provider>/<model>` and `/model <provider> <model>` SHALL switch to both, and an unknown provider SHALL be rejected with the list of providers without changing anything. A switch SHALL keep the conversation, the tools and the session, SHALL apply to the next model call, and SHALL report the new provider and model. A switch to a provider whose credentials are missing SHALL fail with a one-line error, and the previous provider SHALL stay in use.

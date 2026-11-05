@@ -39,12 +39,13 @@
 - [x] 3.1 Run `ruff check`, `ruff format --check` and `pytest`; verify all three pass with only the
   pre-existing skips
   _Evidence: `ruff check src tests` All checks passed; `ruff format --check src tests` 139 files already formatted; `pytest -q` 1242 passed, 3 skipped in 1m 46s (same count as the baseline before the change, since the work rewrote assertions instead of adding cases)._
-- [ ] 3.2 Commit the change with a Conventional Commit message referencing RRG-83 (for example
+- [x] 3.2 Commit the change with a Conventional Commit message referencing RRG-83 (for example
   `fix(cli): answer /mcp, /sessions and /checkpoints on stderr (RRG-83)`), push the branch and open a
   PR in `nar`; verify the PR shows only this change, then merge it and confirm `main` is clean
-  _Evidence so far: commit `bce4d68`, branch pushed, PR rojb/nar#36 open with only these three files. Merge is the owner's call, so this task stays open._
-- [ ] 3.3 Archive the change in `nar-specs`, confirm `openspec validate --all --strict` is fully green,
+  _Evidence: commit `bce4d68`, PR rojb/nar#36 with only these three files, merged as `71907f2` (merge commit) with the branch deleted; `main` clean and carrying the fix. Baseline for comparison: the suite on the same tree gave 1242 passed, 3 skipped and ruff clean._
+- [x] 3.3 Archive the change in `nar-specs`, confirm `openspec validate --all --strict` is fully green,
   and link the archive on RRG-83
+  _Evidence: artifacts merged as `968ca99` (PR rojb/nar-specs#20); change archived as `openspec/changes/archive/2026-11-05-fix-slash-command-stream`, and `openspec validate --all --strict` reports 29 passed, 0 failed afterwards._
 
 ## 4. Manual verification (RRG-83 "done when")
 
