@@ -11,9 +11,10 @@
 - [x] 0.1 Create RRG-83 (title, problem, scope, "done when"), attach it to the `nar` project with the
   `Fase 5 — Sesiones y UX` milestone and the `S`/`Bug` labels, and record its `gitBranchName`
   _Evidence: RRG-83 created on 2026-11-05, In Progress, branch `rubenjustiniano96/rrg-83-fix-slash-command-stream-mcp-sessions-y-checkpoints-escriben`._
-- [ ] 0.2 Open a PR in `nar-specs` from the RRG-83 branch with proposal, specs, design and tasks;
+- [x] 0.2 Open a PR in `nar-specs` from the RRG-83 branch with proposal, specs, design and tasks;
   verify `openspec validate fix-slash-command-stream --strict` passes and that
   `openspec validate --all --strict` stays green
+  _Evidence: commit `2719602` on the RRG-83 branch, PR rojb/nar-specs#20; `openspec validate fix-slash-command-stream --strict` valid and `openspec validate --all --strict` 29 passed, 0 failed._
 
 ## [nar]
 
