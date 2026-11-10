@@ -4,8 +4,8 @@
 
 ## [specs]
 
-- [ ] 0.1 Link this change to Linear RRG-91 and verify the link opens `openspec/changes/fix-api-key-paste/` on GitHub once merged
-- [ ] 0.2 Open a PR in `nar-specs` from Linear's RRG-91 branch; verify `openspec validate fix-api-key-paste --strict` passes
+- [x] 0.1 Link this change to Linear RRG-91 and verify the link opens `openspec/changes/fix-api-key-paste/` on GitHub once merged
+- [x] 0.2 Open a PR in `nar-specs` from Linear's RRG-91 branch; verify `openspec validate fix-api-key-paste --strict` passes _Evidence: rojb/nar-specs#30; the validation passed._
 
 ## [nar]
 
