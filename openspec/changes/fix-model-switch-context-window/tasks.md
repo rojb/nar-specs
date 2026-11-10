@@ -4,8 +4,8 @@
 
 ## [specs]
 
-- [ ] 0.1 Link this change to Linear RRG-90 and verify the link opens `openspec/changes/fix-model-switch-context-window/` on GitHub once merged
-- [ ] 0.2 Open a PR in `nar-specs` from Linear's RRG-90 branch; verify `openspec validate fix-model-switch-context-window --strict` passes
+- [x] 0.1 Link this change to Linear RRG-90 and verify the link opens `openspec/changes/fix-model-switch-context-window/` on GitHub once merged
+- [x] 0.2 Open a PR in `nar-specs` from Linear's RRG-90 branch; verify `openspec validate fix-model-switch-context-window --strict` passes _Evidence: rojb/nar-specs#28; the validation passed._
 
 ## [nar]
 
