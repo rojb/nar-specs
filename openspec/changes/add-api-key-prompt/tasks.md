@@ -4,8 +4,8 @@
 
 ## [specs]
 
-- [ ] 0.1 Link this change to Linear RRG-87 and verify the link opens `openspec/changes/add-api-key-prompt/` on GitHub once merged
-- [ ] 0.2 Open a PR in `nar-specs` from Linear's RRG-87 branch; verify `openspec validate add-api-key-prompt --strict` passes
+- [x] 0.1 Link this change to Linear RRG-87 and verify the link opens `openspec/changes/add-api-key-prompt/` on GitHub once merged
+- [x] 0.2 Open a PR in `nar-specs` from Linear's RRG-87 branch; verify `openspec validate add-api-key-prompt --strict` passes _Evidence: rojb/nar-specs#22; the validation passed._
 
 ## [nar]
 
