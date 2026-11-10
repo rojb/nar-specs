@@ -7,7 +7,7 @@
 ## Decisions
 
 ### 1. `LLMProvider.check()`
-`src/nar/providers/base.py` (MODIFIED): a new method `check() -> None` that raises `ProviderError` when the provider cannot be used. The base implementation does nothing, so test doubles and any future adapter that cannot check are trusted, as today. A shared helper `unknown_model_error(provider, model, available)` builds `model '<m>' was not found by <p>` and adds `; did you mean a, b, c?` with `difflib.get_close_matches` (up to three, cutoff 0.6).
+`src/nar/providers/base.py` (MODIFIED): a new method `check() -> None` that raises `ProviderError` when the provider cannot be used. The base implementation does nothing, so test doubles and any future adapter that cannot check are trusted, as today. A shared helper `unknown_model_error(provider, model, available)` builds `model '<m>' was not found by <p>` and adds `; did you mean a, b, c?` with `difflib.get_close_matches` (up to three, cutoff 0.8; with 0.6, `deepseek-flsh` also suggested `deepseek-v4-pro`).
 
 Each check makes **one attempt** with `CHECK_TIMEOUT = 10.0` seconds through `client.with_options(timeout=CHECK_TIMEOUT)`, and turns SDK errors into messages with the existing `translate_error(exc, context)`. It does not use `stream_with_retries`: the check must fail fast, and the user can retry `/model`. **Alternative rejected:** a one-token chat request. It also checks the model, but it spends tokens and is slower.
 
