@@ -4,8 +4,8 @@
 
 ## [specs]
 
-- [ ] 0.1 Link this change to Linear RRG-89 and verify the link opens `openspec/changes/add-provider-fallback/` on GitHub once merged
-- [ ] 0.2 Open a PR in `nar-specs` from Linear's RRG-89 branch; verify `openspec validate add-provider-fallback --strict` passes
+- [x] 0.1 Link this change to Linear RRG-89 and verify the link opens `openspec/changes/add-provider-fallback/` on GitHub once merged
+- [x] 0.2 Open a PR in `nar-specs` from Linear's RRG-89 branch; verify `openspec validate add-provider-fallback --strict` passes _Evidence: rojb/nar-specs#26; the validation passed._
 
 ## [nar]
 
