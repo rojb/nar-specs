@@ -4,8 +4,8 @@
 
 ## [specs]
 
-- [ ] 0.1 Link this change to Linear RRG-88 and verify the link opens `openspec/changes/add-models-command/` on GitHub once merged
-- [ ] 0.2 Open a PR in `nar-specs` from Linear's RRG-88 branch; verify `openspec validate add-models-command --strict` passes
+- [x] 0.1 Link this change to Linear RRG-88 and verify the link opens `openspec/changes/add-models-command/` on GitHub once merged
+- [x] 0.2 Open a PR in `nar-specs` from Linear's RRG-88 branch; verify `openspec validate add-models-command --strict` passes _Evidence: rojb/nar-specs#24; the validation passed._
 
 ## [nar]
 
