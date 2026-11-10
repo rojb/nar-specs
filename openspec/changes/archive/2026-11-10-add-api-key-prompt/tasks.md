@@ -43,4 +43,10 @@
   - _A new process that took the variable from the Windows user environment started without asking, and got an answer._
   - _The demo then removed `ANTHROPIC_API_KEY` from the user environment._
 
-  _Not run: the same walk-through with a real DeepSeek key, because the team has none yet._
+  _Not run on 2026-11-10 at archive time: the same walk-through with a real DeepSeek key, because the team had none yet._
+
+  _Evidence 2, added after the archive. Nathalia ran it herself on 2026-11-10, in her own PowerShell window with her real DeepSeek key:_
+  - _`nar --provider deepseek` printed `DEEPSEEK_API_KEY is not set.` and `Paste your deepseek API key (hidden; Enter to cancel):`. The pasted key was not shown._
+  - _Then `checking deepseek · deepseek-flash...` and the save question appeared. `y` printed `saved DEEPSEEK_API_KEY for your Windows user; new terminals will see it`._
+  - _DeepSeek answered `hola`._
+  - _Later processes read `DEEPSEEK_API_KEY` and `ANTHROPIC_API_KEY` from the Windows user environment and started without asking._

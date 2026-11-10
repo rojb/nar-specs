@@ -27,4 +27,10 @@
   - _After a question answered by `anthropic`, `/model ollama` printed `checking ollama · qwen2.5-coder...` and an error ending with `still using anthropic · claude-sonnet-5-5`._
   - _The session went on with the same provider._
 
-  _Not run: a question answered by a real provider after the failed switch, because the team has no real key yet._
+  _Not run on 2026-11-10 at archive time: a question answered by a real provider after the failed switch, because the team had no real key yet._
+
+  _Evidence 3, added after the archive (real DeepSeek and Anthropic keys, 2026-11-10, during RRG-88). Starting on DeepSeek, after a question DeepSeek answered:_
+  - _`/model anthropic claude-sonet-5-5` printed `model 'claude-sonet-5-5' was not found by anthropic; did you mean claude-sonnet-5-5, claude-sonnet-5, claude-sonnet-4-6?; still using deepseek · deepseek-flash`._
+  - _`/model ollama` printed `cannot reach Ollama ...; still using deepseek · deepseek-flash`._
+  - _`/model anthropic` printed `model: anthropic · claude-sonnet-5-5`. The next question was answered by Claude, which referred to DeepSeek's earlier answer, so the conversation continued._
+  - _`/model deepseek` switched back._
