@@ -57,14 +57,14 @@ Providers SHALL accept tool definitions in the provider-neutral form exported by
 - **THEN** the tool call is still returned with its id and name, with an empty arguments object, and `nar` does not crash
 
 ### Requirement: Credentials from the environment
-API keys SHALL be read only from environment variables: `ANTHROPIC_API_KEY` for `anthropic`, `OPENROUTER_API_KEY` for `openrouter` and `DEEPSEEK_API_KEY` for `deepseek`. `ollama` SHALL need no key and SHALL use the server at `OLLAMA_HOST` when set, or `http://localhost:11434` otherwise. A missing key SHALL be reported before any request is sent.
+API keys SHALL be read only from environment variables: `ANTHROPIC_API_KEY` for `anthropic`, `OPENROUTER_API_KEY` for `openrouter` and `DEEPSEEK_API_KEY` for `deepseek`. `ollama` SHALL need no key and SHALL use the server at `OLLAMA_HOST` when set, or `http://localhost:11434` otherwise. A missing key SHALL be reported before any request is sent, unless a terminal is attached and the user provides the key when asked.
 
 #### Scenario: Missing API key
-- **WHEN** `provider = "openrouter"` is selected and `OPENROUTER_API_KEY` is not set
+- **WHEN** `provider = "openrouter"` is selected, `OPENROUTER_API_KEY` is not set and no terminal is attached
 - **THEN** `nar` exits with code 1 and a one-line error naming `OPENROUTER_API_KEY`, without contacting OpenRouter
 
 #### Scenario: Missing DeepSeek API key
-- **WHEN** `provider = "deepseek"` is selected and `DEEPSEEK_API_KEY` is not set or is empty
+- **WHEN** `provider = "deepseek"` is selected, `DEEPSEEK_API_KEY` is not set or is empty, and no terminal is attached
 - **THEN** `nar` exits with code 1 and a one-line error naming `DEEPSEEK_API_KEY`, without contacting DeepSeek
 
 #### Scenario: Custom Ollama host
@@ -134,3 +134,53 @@ With `provider = "deepseek"`, `nar` SHALL send conversations to the DeepSeek API
 #### Scenario: DeepSeek overloaded, then success
 - **WHEN** `provider = "deepseek"` is selected, the first request returns HTTP 503 and the second succeeds
 - **THEN** the user sees one retry notice mentioning the server error and the answer is returned normally
+
+### Requirement: A provider can check its access without a model call
+Every provider SHALL be able to check, without sending a conversation or spending tokens, that its server answers, that its key is accepted and that its model exists. The check SHALL make a single attempt with a short timeout, and SHALL fail with the same one-line messages a request uses. When the model does not exist and the provider lists its models, the error SHALL suggest up to three close names. For Ollama, a model that is not installed SHALL suggest `ollama pull <model>`, and a name without a tag SHALL match the `latest` tag.
+
+#### Scenario: A rejected key
+- **WHEN** a provider is checked with a key its server rejects
+- **THEN** the check fails with the message that names the key's environment variable
+
+#### Scenario: A model that does not exist
+- **WHEN** a provider is checked with a misspelled model name such as `deepseek-flsh`
+- **THEN** the check fails with `model 'deepseek-flsh' was not found by deepseek` and suggests `deepseek-flash`
+
+#### Scenario: Ollama is not running
+- **WHEN** Ollama is checked and nothing listens at its host
+- **THEN** the check fails once, without retries, with the message that says how to start it
+
+#### Scenario: An Ollama model that is not installed
+- **WHEN** Ollama is checked with a model it has not pulled
+- **THEN** the check fails with a message that suggests `ollama pull <model>`
+
+#### Scenario: Everything answers
+- **WHEN** the server answers, the key is accepted and the model is listed
+- **THEN** the check passes and no model call is made
+
+### Requirement: A missing key is asked for in the terminal
+When the selected provider's key variable is not set, and both standard input and standard error are terminals, `nar` SHALL ask for the key on standard error with hidden input, at startup and when `/model` switches to that provider. The key SHALL be checked with the provider's access check before it is used. When the check passes, `nar` SHALL ask whether to save it. On Windows, saving SHALL set a user environment variable with the variable's name. On other systems, `nar` SHALL NOT save it and SHALL show the `export` line to add, with a placeholder instead of the key. The key SHALL NOT be written to any file, session or message. An empty answer, end of input or Ctrl+C SHALL cancel and report the missing variable as before.
+
+#### Scenario: Pasting a valid key and saving it
+- **WHEN** `nar --provider deepseek` starts in a terminal without `DEEPSEEK_API_KEY`, the user pastes a key DeepSeek accepts and answers `y`
+- **THEN** the session starts with that key, `DEEPSEEK_API_KEY` is saved for the Windows user, and the key does not appear in the output
+
+#### Scenario: Using a key once
+- **WHEN** the user pastes a key DeepSeek accepts and answers `n`
+- **THEN** the session starts with that key, and nothing is saved
+
+#### Scenario: A rejected key
+- **WHEN** the user pastes a key the provider rejects
+- **THEN** `nar` reports the rejected key in one line, does not save it, and does not start the session; in `/model`, the previous provider stays
+
+#### Scenario: Cancelling
+- **WHEN** the user presses Enter with no key, or Ctrl+C
+- **THEN** `nar` reports the missing variable in one line, as without a terminal
+
+#### Scenario: No terminal
+- **WHEN** the key is missing and the input is piped
+- **THEN** `nar` asks nothing and reports the missing variable, as before
+
+#### Scenario: Switching with /model
+- **WHEN** the user types `/model anthropic` without `ANTHROPIC_API_KEY` in a terminal, and pastes a key Anthropic accepts
+- **THEN** the switch happens with that key, after the same save question

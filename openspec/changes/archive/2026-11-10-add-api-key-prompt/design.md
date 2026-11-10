@@ -19,7 +19,7 @@
 **Alternative rejected:** a credentials file in `~/.nar`. It is outside any repository, but it is a plain-text secret on disk and contradicts `Credentials from the environment`.
 
 ### 3. Where it is called
-- Startup: `src/nar/cli/main.py` (MODIFIED) calls `prepare_api_key(config, prompter, note)` before `run_single` and `repl.run`. This function builds the provider after `obtain_api_key` and runs `check()`. On failure it discards the key and raises; otherwise it calls `keep_api_key`.
+- Startup: `create_agent` (`src/nar/cli/runner.py`, MODIFIED) calls `prepare_api_key(config, prompter, note, warn)` before it builds the provider. Both modes go through `create_agent` at startup, so `main.py` does not change. This replaces the first plan, which put the call in `main.py` before `run_single` and `repl.run`. This function builds the provider after `obtain_api_key` and runs `check()`. On failure it discards the key and raises; otherwise it calls `keep_api_key`.
 - `/model`: `switch_model` (`src/nar/cli/runner.py`, MODIFIED) calls `obtain_api_key` before `create_provider`. If `check()` fails or is cancelled, it discards the pending key. If it passes, it calls `keep_api_key` and then switches.
 
 No new configuration keys.

@@ -34,6 +34,6 @@ None.
 
 ## Impact
 
-- **Code (`nar` repo):** `src/nar/ui/key_prompt.py` (new), `src/nar/cli/api_key.py` (new), `src/nar/cli/main.py`, `src/nar/cli/runner.py`, `src/nar/cli/commands.py`, and tests.
+- **Code (`nar` repo):** `src/nar/ui/key_prompt.py` (new), `src/nar/cli/api_key.py` (new), `src/nar/cli/runner.py`, and tests.
 - **Dependencies:** none new. `getpass` and `winreg` are in the standard library.
 - **Security:** the key lives only in the process environment and, if the user agrees, in the Windows user environment. It is never written to a file, a session or a message.
