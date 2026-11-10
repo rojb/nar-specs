@@ -14,7 +14,7 @@ RRG-86 added `LLMProvider.check()`. Each adapter already reads its model list in
 Both go through `call_once` with `CHECK_TIMEOUT`, as `check` does.
 
 ### 2. `/models`
-`src/nar/cli/runner.py` (MODIFIED): `list_models(agent, view, spec) -> tuple[str, str, list[str]]`.
+`src/nar/cli/runner.py` (MODIFIED): `list_models(agent, view, spec) -> tuple[str, list[str]]`, which returns the provider's name and its model names.
 - With no provider, it uses `agent.provider`.
 - With a provider, it builds one with `factory.create_provider(NarConfig(provider=...))` and does not assign it. A missing key raises the factory's usual error.
 - It prints `listing <provider> models...` while it waits.
