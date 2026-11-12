@@ -13,7 +13,7 @@
   - `--provider anthropic` then `/model` shows `command line` for the provider
   - a value from a project or user config file shows the file path
   - an unset value shows `default`
-  - after `/model <provider>` both lines show `this session (/model)`
+  - after `/model <provider>` both values show `set in this session with /model`
   - a failed switch leaves the sources unchanged
 
   Verify `ruff check .`, `ruff format --check .` and `pytest` are clean.
@@ -22,5 +22,5 @@
 
 - [ ] 2.1 Walk through RRG-93's "done when" in a real terminal, recording what was observed:
   - run `nar --provider anthropic`, type `/model`, and record that the provider line says `command line`
-  - type `/model openrouter`, then `/model`, and record that the provider line says `this session (/model)`
+  - type `/model openrouter`, then `/model`, and record that the provider line says `set in this session with /model`
   - run `/config` and record that the wording for the same sources matches

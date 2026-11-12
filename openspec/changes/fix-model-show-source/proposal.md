@@ -14,7 +14,7 @@ The `tui-commands` spec says `/model` with no argument shows the provider and mo
 
 - `/model` with no argument prints the provider and the model on their own lines, each with its source.
 - The source uses the same wording as `/config`: `default`, the config file path, or `command line`.
-- After a successful `/model <provider>` switch, `/model` shows `this session (/model)` as the source of what was switched.
+- After a successful `/model <provider>` switch, `/model` shows `set in this session with /model` as the source of what was switched.
 - A switch that fails changes nothing, so the sources stay as they were.
 
 Out of scope: changing `/config`, changing how a switch is checked or reported, and saving the choice to a config file.
