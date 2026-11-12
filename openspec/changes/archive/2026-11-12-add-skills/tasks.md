@@ -34,10 +34,13 @@
 
 ## Manual verification
 
-- [ ] 2.1 Walk through RRG-92's "done when" in a real terminal with `.nar/skills/demo/SKILL.md`:
+- [x] 2.1 Walk through RRG-92's "done when" in a real terminal with `.nar/skills/demo/SKILL.md`:
   - run `nar`, type `/skills`, and record that `demo` is listed as project
   - ask something that matches the description, and record the `skill` tool call and an answer that follows the instructions
   - type `/skill demo` and a request, and record that the answer follows the instructions
   - break the frontmatter of a second skill, restart, and record the warning and that `nar` still starts
 
-  _Partial evidence (Windows 11, 2026-11-12, piped input, `--provider ollama`, `NAR_HOME` and project in a temp folder): startup printed `skipping skill: ...\broken\SKILL.md: the frontmatter is missing (the file must start with ---)` and went on; `/skills` printed `demo (project): Use when the user asks for a secret greeting.`; `/skill nope` printed `error: there is no skill named 'nope'; available skills: demo`; `/skill demo` printed `Skill demo will be used with the next request.`; `/clear` worked; `/tools` listed `skill`. Pending: the two steps that need a model answer (no provider key was available in this environment); they are covered with a fake provider in `tests/test_cli.py`._
+  _Partial evidence (Windows 11, 2026-11-12, piped input, `--provider ollama`, `NAR_HOME` and project in a temp folder): startup printed `skipping skill: ...\broken\SKILL.md: the frontmatter is missing (the file must start with ---)` and went on; `/skills` printed `demo (project): Use when the user asks for a secret greeting.`; `/skill nope` printed `error: there is no skill named 'nope'; available skills: demo`; `/skill demo` printed `Skill demo will be used with the next request.`; `/clear` worked; `/tools` listed `skill`. Real-model runs (same setup, `--provider anthropic`, `claude-sonnet-5-5`, with the demo skill telling the model to answer only `PINEAPPLE-42`):_
+  - _`Give me the secret greeting.` printed `-> skill(name="demo")`, then `ok loaded skill demo`, and the model answered `PINEAPPLE-42`._
+  - _`/skill demo` printed `Skill demo will be used with the next request.`; then `Say hello to me.` was answered `PINEAPPLE-42`, with no tool call._
+  - _Both runs printed the broken-skill warning first and started normally._
