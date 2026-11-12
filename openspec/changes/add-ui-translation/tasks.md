@@ -13,15 +13,15 @@
 
 Branch: `rubenjustiniano96/rrg-98-ui-translation-1-core`, from `main`.
 
-- [ ] 1.1 Create `src/nar/i18n/` with `t(key, **values)`, `set_language` and `current_language()`, and the two message modules `messages_es.py` and `messages_en.py` with the first keys. Verify in `tests/test_i18n.py`:
+- [x] 1.1 Create `src/nar/i18n/` with `t(key, **values)`, `set_language` and `current_language()`, and the two message modules `messages_es.py` and `messages_en.py` with the first keys. Verify in `tests/test_i18n.py`: (c7e8f37; `tests/test_i18n.py` 7 tests (format, default `es`, unknown key names the key, set_language))
   - `t` formats the placeholders and uses the active language
   - the default language is `es` before `set_language` is called
   - an unknown key raises an error that names the key
-- [ ] 1.2 Add the parity test: both catalogs have exactly the same keys, and each key has the same placeholders in both. Verify it fails on a missing key and on a different placeholder (two small fixtures inside the test)
-- [ ] 1.3 Add `tests/conftest.py` with an autouse fixture that sets the language to `en` before each test and restores the default after it. Verify the existing suite passes with no other test change
-- [ ] 1.4 Add `src/nar/i18n/answers.py` (`parse_answer`: yes, no, always; case and accent insensitive; `y`, `yes`, `s`, `si`, `sí`, `n`, `no`, `a`, `always`, `siempre`). Verify in `tests/test_i18n.py` with a table of accepted and rejected answers, including `SÍ`, ` Siempre ` and `quizás`
-- [ ] 1.5 Call `set_language(config.language)` in `cli()` right after `load_config`. Verify with a test that runs `cli` with `--language en` and with the default, and checks `current_language()`
-- [ ] 1.6 Document in the README the interface language and the steps to add a text (add the key to both message modules, use `t(...)`, run the parity test). Verify `ruff check .`, `ruff format --check .` and `pytest` are clean
+- [x] 1.2 Add the parity test: both catalogs have exactly the same keys, and each key has the same placeholders in both. Verify it fails on a missing key and on a different placeholder (two small fixtures inside the test) (3fd1206; parity test plus two fixtures (missing key, different placeholder), 3 tests)
+- [x] 1.3 Add `tests/conftest.py` with an autouse fixture that sets the language to `en` before each test and restores the default after it. Verify the existing suite passes with no other test change (929ab7d; suite 1451 passed, 3 skipped with no other test change (baseline 1440 + 11 new))
+- [x] 1.4 Add `src/nar/i18n/answers.py` (`parse_answer`: yes, no, always; case and accent insensitive; `y`, `yes`, `s`, `si`, `sí`, `n`, `no`, `a`, `always`, `siempre`). Verify in `tests/test_i18n.py` with a table of accepted and rejected answers, including `SÍ`, ` Siempre ` and `quizás` (42c8c2a; 28 answer cases (`SÍ`, ` Siempre `, `quizás` and more))
+- [x] 1.5 Call `set_language(config.language)` in `cli()` right after `load_config`. Verify with a test that runs `cli` with `--language en` and with the default, and checks `current_language()` (c60decb; 2 tests in `tests/test_cli.py` (`--language`, file and default))
+- [x] 1.6 Document in the README the interface language and the steps to add a text (add the key to both message modules, use `t(...)`, run the parity test). Verify `ruff check .`, `ruff format --check .` and `pytest` are clean (fb61d59; README section "Interface language"; ruff check, ruff format --check clean, pytest 1481 passed, 3 skipped)
 
 ### 2. Prompts and views
 
