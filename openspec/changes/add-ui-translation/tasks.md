@@ -39,10 +39,10 @@ Branch: `rubenjustiniano96/rrg-98-ui-translation-2-prompts`, from slice 1.
 
 Branch: `rubenjustiniano96/rrg-98-ui-translation-3-commands`, from slice 2.
 
-- [ ] 3.1 Make `register_command` take a catalog key and resolve it when commands are listed (`cli/slash.py`, `cli/commands.py`). Verify with `es` and then `en` in the same process that `/help` lists the summaries in each language and the command names do not change
-- [ ] 3.2 Translate the output of the commands in `cli/commands.py` and `cli/slash.py`. Verify with `es` set that `/config`, `/tools`, `/tokens`, `/model`, `/sessions` and `/skills` print Spanish sentences with the same keys, values and sources
-- [ ] 3.3 Translate the banner and notices in `cli/repl.py`, the messages in `cli/runner.py` and the prompts in `cli/api_key.py`. Verify with no configuration that the banner is `nar · <provider> · <model>. Escribe 'exit' para salir.` and with `--language en` it is the English one
-- [ ] 3.4 Document the translated commands in the README. Verify `ruff check .`, `ruff format --check .` and `pytest` are clean
+- [x] 3.1 Make `register_command` take a catalog key and resolve it when commands are listed (`cli/slash.py`, `cli/commands.py`). Verify with `es` and then `en` in the same process that `/help` lists the summaries in each language and the command names do not change (de3b9e0; `tests/test_commands_i18n.py` 3 tests: `/help` and completion list the summaries in `es` then `en` in one process, command names unchanged; `register_command` takes a catalog key, 18 summary keys)
+- [x] 3.2 Translate the output of the commands in `cli/commands.py` and `cli/slash.py`. Verify with `es` set that `/config`, `/tools`, `/tokens`, `/model`, `/sessions` and `/skills` print Spanish sentences with the same keys, values and sources (eff6a3b; 38 `cmd.*` keys; Spanish tests in `tests/test_cli.py` and `tests/test_slash.py`: `/config`, `/tools`, `/tokens`, `/model`, `/sessions`, `/skills` and the errors print Spanish with the same keys, values and sources; `/tools` descriptions stay English; singular fixes in `en`: `1 message`, `1 model`)
+- [x] 3.3 Translate the banner and notices in `cli/repl.py`, the messages in `cli/runner.py` and the prompts in `cli/api_key.py`. Verify with no configuration that the banner is `nar · <provider> · <model>. Escribe 'exit' para salir.` and with `--language en` it is the English one (168e95b; banner `nar · fake · fake-model. Escribe 'exit' para salir.` with no config, English with `--language en`; waiting text, runner and key notes translated; the `summary` of the approval rejected and unavailable results translated, their `output` stays English)
+- [x] 3.4 Document the translated commands in the README. Verify `ruff check .`, `ruff format --check .` and `pytest` are clean (1572c46; README "Commands"; `ruff check .`, `ruff format --check .` clean, `pytest` 1580 passed, 3 skipped)
 
 ### 4. Module errors and warnings
 
