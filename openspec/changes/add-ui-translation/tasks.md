@@ -27,13 +27,13 @@ Branch: `rubenjustiniano96/rrg-98-ui-translation-1-core`, from `main`.
 
 Branch: `rubenjustiniano96/rrg-98-ui-translation-2-prompts`, from slice 1.
 
-- [ ] 2.1 Translate `ui/approval_prompt.py`, `ui/trust_prompt.py` and `ui/key_prompt.py`, and make them use `parse_answer`. Verify in the prompt tests, with `es` set:
+- [x] 2.1 Translate `ui/approval_prompt.py`, `ui/trust_prompt.py` and `ui/key_prompt.py`, and make them use `parse_answer`. Verify in the prompt tests, with `es` set: (604b42d; `tests/test_prompts_i18n.py` 47 cases: Spanish and English questions, `YES`/`sí`/`SI`/`siempre` in both languages, `quizás` asks again, rejected and unavailable results stay English; `tn` added for plural keys)
   - the three questions read as in the `ui-language` spec (`¿Permitir write_file? [s]í / [n]o / [a] siempre write_file en esta sesión: `)
   - `YES`, `sí`, `SI` and `siempre` are accepted in both languages, `quizás` asks again
   - the rejected and unavailable results sent to the model stay English in `es`
-- [ ] 2.2 Translate `ui/provider_menu.py` and the labels in `cli/fallback.py`. Verify with `es` set that the menu text is Spanish and the provider names and the configuration values are unchanged
-- [ ] 2.3 Translate `ui/tool_view.py`, `ui/agent_view.py`, `ui/session_view.py` and `ui/mcp_view.py`, with the `aviso:` prefix and separate keys for plurals. Verify with `es` set: a tool result summary and an agent warning are Spanish, the output of the tool that goes to the model is English, and `1` and `2` invalid session files give the two sentences of the spec
-- [ ] 2.4 Document the prompt answers in the README. Verify `ruff check .`, `ruff format --check .` and `pytest` are clean
+- [x] 2.2 Translate `ui/provider_menu.py` and the labels in `cli/fallback.py`. Verify with `es` set that the menu text is Spanish and the provider names and the configuration values are unchanged (03fd732; menu, status labels and `Elige 1-3:` in Spanish, names, models and values unchanged)
+- [x] 2.3 Translate `ui/tool_view.py`, `ui/agent_view.py`, `ui/session_view.py` and `ui/mcp_view.py`, with the `aviso:` prefix and separate keys for plurals. Verify with `es` set: a tool result summary and an agent warning are Spanish, the output of the tool that goes to the model is English, and `1` and `2` invalid session files give the two sentences of the spec (8185236; `tests/test_views_i18n.py` 25 tests: tool summary, `aviso:` warnings, loop and context lines, `1`/`2` invalid session files give `1 archivo de sesión no es válido y se omitió` and `2 archivos de sesión no son válidos y se omitieron`, model-bound output unchanged)
+- [x] 2.4 Document the prompt answers in the README. Verify `ruff check .`, `ruff format --check .` and `pytest` are clean (2c4982d; README table of questions and accepted answers; `ruff check .`, `ruff format --check .` clean, `pytest` 1558 passed, 3 skipped)
 
 ### 3. Slash commands and REPL/runner
 
