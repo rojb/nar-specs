@@ -9,19 +9,25 @@
 
 ## [nar]
 
-- [ ] 1.1 Create Linear's RRG-97 branch from `main`, add the `Language` enum and the `language` setting to `NarConfig` (default `es`), and add the `--language` option to `cli/main.py`. Verify in `tests/test_config*.py` and `tests/test_cli.py` with `NAR_HOME` in `tmp_path`:
+- [x] 1.1 Create Linear's RRG-97 branch from `main`, add the `Language` enum and the `language` setting to `NarConfig` (default `es`), and add the `--language` option to `cli/main.py`. Verify in `tests/test_config*.py` and `tests/test_cli.py` with `NAR_HOME` in `tmp_path`:
   - the default is `es` with source `default`
   - the user file, the project file and the flag each win over the previous one, and `--show-config` shows the right source
   - `language = "fr"` in a file exits with code 1 and one line naming `language` and listing `es, en`
   - `--language fr` exits with code 2 and lists both values
   - `/config` lists `language` with its source
-- [ ] 1.2 Add the language section to `build_system_prompt` and `build_subagent_prompt`, add the language to the summary instructions through `summary_system`, and pass `config.language` from `create_agent` to the prompt, the `Compactor` and the `TaskTool`. Verify in `tests/test_system_prompt.py`, `tests/test_tools_task.py`, `tests/test_compaction.py` and the runner tests:
+
+  _Evidence: `6724f72`, 6 tests in `tests/test_config.py` and 7 in `tests/test_cli.py`, plus new assertions in the two existing `--show-config` and `describe` tests; `pytest` gave 1427 passed and 3 skipped (baseline 1414 passed and 3 skipped)._
+- [x] 1.2 Add the language section to `build_system_prompt` and `build_subagent_prompt`, add the language to the summary instructions through `summary_system`, and pass `config.language` from `create_agent` to the prompt, the `Compactor` and the `TaskTool`. Verify in `tests/test_system_prompt.py`, `tests/test_subagent.py`, `tests/test_context_compaction.py` and the runner tests:
   - the system prompt names Spanish by default and English with `en`, and keeps the exceptions for code, paths, commands and quoted text
   - the first request of a subagent has a system prompt with the same section
   - the instructions of a summary name the language, for the main agent and for a subagent
   - `--language en` in single mode puts the English instruction in the prompt sent to the provider
   - existing tests that compare prompt text are updated to the new default on purpose
-- [ ] 1.3 Document the setting in the README (a `language` row in the configuration table, `--language` in the flags and examples, and a short note that the interface stays in English until RRG-98). Verify `ruff check .`, `ruff format --check .` and `pytest` are clean
+
+  _Evidence: `8bfb6d2`, 5 tests in `tests/test_system_prompt.py`, 3 in `tests/test_subagent.py`, 2 in `tests/test_context_compaction.py` and 3 in `tests/test_cli.py`. No existing test needed a change: none compared the prompt text exactly. `pytest` gave 1440 passed and 3 skipped._
+- [x] 1.3 Document the setting in the README (a `language` row in the configuration table, `--language` in the flags and examples, and a short note that the interface stays in English until RRG-98). Verify `ruff check .`, `ruff format --check .` and `pytest` are clean
+
+  _Evidence: `35808e3`, a `## Reply language` section, the `language` row in the table and `--language` in the usage list. `ruff check .` passed, `ruff format --check .` reported 156 files already formatted, and `pytest` gave 1440 passed and 3 skipped._
 
 ## Manual verification
 
