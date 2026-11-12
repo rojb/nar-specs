@@ -65,7 +65,7 @@ Branch: `rubenjustiniano96/rrg-98-ui-translation-5-click`, from slice 4.
 
 ## Manual verification
 
-- [ ] 6.1 Walk through RRG-98's "done when" in a real terminal, in a folder without configuration, and record what is observed:
+- [x] 6.1 Walk through RRG-98's "done when" in a real terminal, in a folder without configuration, and record what is observed:
   - run `nar` and record that the banner is in Spanish; run `/help` and record Spanish summaries
   - cause an error (for example `nar --resume zzz`) and record the Spanish message with the `error:` prefix
   - cause a warning (for example a broken skill file or an invalid session file) and record the `aviso:` prefix
@@ -73,3 +73,14 @@ Branch: `rubenjustiniano96/rrg-98-ui-translation-5-click`, from slice 4.
   - repeat the banner, `/help`, the error, the warning and the approval prompt with `--language en` and record that all are English
   - run `nar --help` and record Spanish help; run `nar --language en --help` and record English help; run `nar --foo` and record the Spanish Click error with exit code 2
   - run the catalog test (`pytest tests/test_i18n.py`) and record that it finds no missing keys
+
+  _Evidence (Windows 11, 2026-11-12, real console through the e2e harness, temp folder and `NAR_HOME`, Anthropic `claude-haiku-5-5`, slice-5 branch):_
+  - _Banner: `nar · anthropic · claude-haiku-5-5. Escribe 'exit' para salir.` `/help` showed lines such as `/clear  inicia una conversación nueva, conservando proveedor y aprobación`._
+  - _Error: `nar --resume zzz` printed `error: no hay ninguna sesión 'zzz'; para dar también una solicitud, usa nar --resume <id> "solicitud"` (exit 1). `/nope` printed `error: /nope no es un comando; disponibles: ...`._
+  - _Warning: a broken skill printed `aviso: se omite un skill: ...SKILL.md: falta el encabezado (el archivo debe empezar con ---)`._
+  - _Approval: `¿Permitir write_file? [s]í / [n]o / [a] siempre write_file en esta sesión:`. `si` gave `✓ creado uno.txt (1 línea)`, and `yes` gave `✓ creado dos.txt (1 línea)`. `n` gave `Motivo (opcional, Enter para omitir):`, then `✗ rechazado por el usuario`._
+  - _With `--language en`, the output was `Type 'exit' to leave.`, `/clear  start a new conversation, keeping provider and approval`, `error: /nope is not a command; ...`, `warning: skipping skill: ...`, `Allow write_file? [y]es / [n]o / [a]lways allow write_file this session:` and `✗ rejected by user`._
+  - _`nar --help` printed `Uso: nar [OPTIONS] [PROMPT]` and `nar: un agente de programación para la terminal.` With `--language en --help` the output was `Usage: nar [OPTIONS] [PROMPT]` and `nar: a CLI coding agent.`_
+  - _`nar --foo` printed `Error: No existe la opción '--foo'.` (exit 2). `--approval bogus` printed `Error: Valor no válido para '--approval': 'bogus' no es una de las opciones: 'ask', 'auto-edit', 'yolo'.` (exit 2)._
+  - _`pytest tests/test_i18n.py`: 43 passed._
+  - _Still English, as designed: `[OPTIONS]`, `[PROMPT]`, `TEXT`, and provider, MCP and hook text._
