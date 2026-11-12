@@ -4,8 +4,8 @@
 
 ## [specs]
 
-- [ ] 0.1 Link this change to Linear RRG-98 and verify the link opens `openspec/changes/add-ui-translation/` on GitHub once merged
-- [ ] 0.2 Open a PR in `nar-specs` from Linear's RRG-98 branch; verify `openspec validate add-ui-translation --strict` passes
+- [x] 0.1 Link this change to Linear RRG-98 and verify the link opens `openspec/changes/add-ui-translation/` on GitHub once merged _Evidence: RRG-98 links the change folder, rojb/nar-specs#38 and rojb/nar#49 to #53._
+- [x] 0.2 Open a PR in `nar-specs` from Linear's RRG-98 branch; verify `openspec validate add-ui-translation --strict` passes _Evidence: rojb/nar-specs#38; the validation passed._
 
 ## [nar]
 
