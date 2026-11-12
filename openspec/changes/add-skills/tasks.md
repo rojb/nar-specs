@@ -4,8 +4,8 @@
 
 ## [specs]
 
-- [ ] 0.1 Link this change to Linear RRG-92 and verify the link opens `openspec/changes/add-skills/` on GitHub once merged
-- [ ] 0.2 Open a PR in `nar-specs` from Linear's RRG-92 branch; verify `openspec validate add-skills --strict` passes
+- [x] 0.1 Link this change to Linear RRG-92 and verify the link opens `openspec/changes/add-skills/` on GitHub once merged _Evidence: RRG-92 links the change folder, rojb/nar-specs#32 and rojb/nar#43._
+- [x] 0.2 Open a PR in `nar-specs` from Linear's RRG-92 branch; verify `openspec validate add-skills --strict` passes _Evidence: rojb/nar-specs#32; the validation passed._
 
 ## [nar]
 
