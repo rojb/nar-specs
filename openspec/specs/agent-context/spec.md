@@ -6,7 +6,7 @@ Defines the conversation the agent keeps: what the system prompt tells the model
 ## Requirements
 
 ### Requirement: System prompt
-Every model call SHALL include a system prompt that tells the model it is `nar`, a coding agent working in the user's project, how to use its tools, and the current working directory, operating system and date. When project instructions from `AGENTS.md` were loaded, the system prompt SHALL include them, marked as the project's instructions. When at least one skill is available, the system prompt SHALL list every available skill by name and description, in name order, and SHALL tell the model to call the `skill` tool before working on a request that matches a skill's description. The system prompt SHALL NOT include the instructions of any skill.
+Every model call SHALL include a system prompt that tells the model it is `nar`, a coding agent working in the user's project, how to use its tools, and the current working directory, operating system and date. When project instructions from `AGENTS.md` were loaded, the system prompt SHALL include them, marked as the project's instructions. When at least one skill is available, the system prompt SHALL list every available skill by name and description, in name order, and SHALL tell the model to call the `skill` tool before working on a request that matches a skill's description. The system prompt SHALL NOT include the instructions of any skill. The system prompt SHALL tell the model to always reply to the user in the configured language (Spanish or English), while keeping code, identifiers, file names, paths, commands, tool arguments and quoted text unchanged.
 
 #### Scenario: Project instructions included
 - **WHEN** `nar` starts in a project whose `AGENTS.md` says "Always answer in Spanish"
@@ -27,6 +27,14 @@ Every model call SHALL include a system prompt that tells the model it is `nar`,
 #### Scenario: No skills
 - **WHEN** no skill is available
 - **THEN** the system prompt has no skills section
+
+#### Scenario: Reply language Spanish
+- **WHEN** the language is `es`
+- **THEN** the system prompt tells the model to always reply in Spanish and to leave code, identifiers, paths, commands and tool arguments unchanged
+
+#### Scenario: Reply language English
+- **WHEN** the language is `en`
+- **THEN** the system prompt tells the model to always reply in English, with the same exceptions
 
 ### Requirement: Conversation history
 The conversation SHALL keep, in order, every user request, every assistant answer (with its tool calls) and every tool result of the session. In interactive mode, each new request SHALL be sent together with the earlier ones, so the model can refer to them.

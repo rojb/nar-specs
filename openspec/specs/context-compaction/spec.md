@@ -123,3 +123,14 @@ When the provider or model changes during a session, with `/model` or by picking
 #### Scenario: A window set by the user
 - **WHEN** `.nar/config.toml` sets `context_window = 32000` and the user switches provider
 - **THEN** the window stays 32,000 tokens
+
+### Requirement: Summary language
+The instructions given to the model for a summary SHALL tell it to write the summary in the configured language, keeping file paths, names, commands and values exact. A subagent SHALL summarize in the same language as the main agent.
+
+#### Scenario: Summary in Spanish
+- **WHEN** the language is `es` and the conversation is compacted
+- **THEN** the instructions for the summary tell the model to write it in Spanish
+
+#### Scenario: Summary in English
+- **WHEN** the language is `en` and the user types `/compact`
+- **THEN** the instructions for the summary tell the model to write it in English
