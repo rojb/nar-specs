@@ -31,8 +31,15 @@
 
 ## Manual verification
 
-- [ ] 2.1 Walk through RRG-97's "done when" in a real terminal, in a folder without configuration:
+- [x] 2.1 Walk through RRG-97's "done when" in a real terminal, in a folder without configuration:
   - run `nar "what does README.md say?"` (any question written in English) and record that the answer is in Spanish
   - run the same question with `--language en` and record that the answer is in English
   - run `nar --show-config` and record the `language` line with its source (`default`), then with `--language en` record the source `command line`
   - set `language = "en"` in `.nar/config.toml`, run `nar --show-config`, and record the project file as the source
+
+  _Evidence (Windows 11, 2026-11-12, empty temp folder and `NAR_HOME`, Anthropic `claude-haiku-5-5`, single mode):_
+  - _`nar "What is the capital of France? Answer in one short sentence."` answered `La capital de Francia es París.`_
+  - _The same question with `--language en` answered `The capital of France is Paris.`_
+  - _`nar --show-config` printed `language = es  (default)`, and with `--language en` it printed `language = en  (command line)`._
+  - _With `language = "en"` in `.nar/config.toml`, it printed `language = en  (.nar/config.toml)`._
+  - _`--language fr` printed `Error: Invalid value for '--language': 'fr' is not one of 'es', 'en'.`_
